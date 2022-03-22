@@ -47,6 +47,9 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+build/ios/Debug-iphonesimulator/App.framework/flutter_assets/isolate_snapshot_data
+build/ios/Debug-iphonesimulator/App.framework/flutter_assets/kernel_blob.bin
+build/ios/Debug-iphonesimulator/App.framework/flutter_assets/NOTICES.Z
 
 .dart_tool/flutter_build/a2ca7c54fa20b216cd87242f759cf195/flutter_assets.d
 .dart_tool/flutter_build/a2ca7c54fa20b216cd87242f759cf195/gen_dart_plugin_registrant.stamp
@@ -66,9 +69,6 @@ build/ios/Debug-iphonesimulator/App.framework/Info.plist
 build/ios/Debug-iphonesimulator/App.framework/_CodeSignature/CodeResources
 build/ios/Debug-iphonesimulator/App.framework/flutter_assets/AssetManifest.json
 build/ios/Debug-iphonesimulator/App.framework/flutter_assets/FontManifest.json
-build/ios/Debug-iphonesimulator/App.framework/flutter_assets/isolate_snapshot_data
-build/ios/Debug-iphonesimulator/App.framework/flutter_assets/kernel_blob.bin
-build/ios/Debug-iphonesimulator/App.framework/flutter_assets/NOTICES.Z
 build/ios/Debug-iphonesimulator/App.framework/flutter_assets/vm_snapshot_data
 build/ios/Debug-iphonesimulator/App.framework/flutter_assets/assets/appIcons/icon_admin.png
 build/ios/Debug-iphonesimulator/App.framework/flutter_assets/assets/appIcons/icon_app.png
