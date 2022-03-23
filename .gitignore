@@ -47,6 +47,9 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+build/ios/Debug-iphonesimulator/App.framework/flutter_assets/isolate_snapshot_data
+build/ios/Debug-iphonesimulator/App.framework/flutter_assets/kernel_blob.bin
+build/ios/Debug-iphonesimulator/App.framework/flutter_assets/NOTICES.Z
 
 
 build/
