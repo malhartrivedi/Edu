@@ -1,11 +1,11 @@
+import 'package:admin/service/user_auth.dart';
 import 'package:admin/utils/app_asset_path.dart';
 import 'package:admin/utils/app_color.dart';
-import 'package:admin/utils/app_fonts.dart';
 import 'package:admin/utils/constants.dart';
-import 'package:admin/views/admin_Registration.dart';
-import 'package:admin/views/dashboard_page.dart';
+import 'package:admin/utils/global.dart';
+import 'package:admin/views/registration_page.dart';
 import 'package:admin/widgets/my_textstyle.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,30 +18,26 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final passwordController = TextEditingController();
+  final emailController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-
-  String _password = '';
   bool _isVisible = false;
   bool emailFocus = false;
   bool passFocus = false;
 
-  final formKey = GlobalKey<FormState>();
-
   String get email => emailController.value.text;
+
   String get password => passwordController.value.text;
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: whiteOff,
-          body: _getBody(),
-          bottomSheet: _bottomRegister(),
-        ),
+      child: Scaffold(
+        backgroundColor: whiteOff,
+        body: _getBody(),
+        bottomSheet: _bottomRegister(),
       ),
     );
   }
@@ -49,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
   _getBody() {
     return Center(
       child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.w,vertical: 24.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
         child: Column(
           children: [
             _iconTextDisplay(),
@@ -110,8 +106,10 @@ class _LoginPageState extends State<LoginPage> {
               Icons.email,
               color: greyDark,
             ),
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
+            contentPadding: EdgeInsets.symmetric(
+              vertical: 6.h,
+              horizontal: 6.w,
+            ),
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             labelText: Constants.email,
@@ -122,18 +120,14 @@ class _LoginPageState extends State<LoginPage> {
           validator: (email) {
             if (email!.isEmpty) {
               return Constants.enterEmail;
-            } else if (!RegExp(
-                Constants.emailValidator)
-                .hasMatch(email)) {
+            } else if (!RegExp(Constants.emailValidator).hasMatch(email)) {
               return Constants.validEmail;
             }
             return null;
           },
         ),
         onFocusChange: (email) {
-          setState(() {
-            emailFocus = email;
-          });
+          setState(() => emailFocus = email);
         },
       ),
     );
@@ -151,28 +145,21 @@ class _LoginPageState extends State<LoginPage> {
         child: TextFormField(
           controller: passwordController,
           obscureText: !_isVisible,
-          onChanged: (password) => _password = password,
           keyboardType: TextInputType.visiblePassword,
           style: h2TextStyle,
           decoration: InputDecoration(
             suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  _isVisible = !_isVisible;
-                });
-              },
-              icon: _isVisible
-                  ? const Icon(
-                Icons.visibility,
-                color: Colors.black,
-              )
-                  : const Icon(
-                Icons.visibility_off,
-                color: Colors.grey,
-              ),
+                onPressed: () {
+                  setState(() => _isVisible = !_isVisible);
+                },
+                icon: Icon(
+                  _isVisible ? Icons.visibility : Icons.visibility_off,
+                  color: _isVisible ? Colors.black : Colors.grey,
+                )),
+            contentPadding: EdgeInsets.symmetric(
+              vertical: 6.h,
+              horizontal: 6.w,
             ),
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             labelText: Constants.password,
@@ -190,9 +177,7 @@ class _LoginPageState extends State<LoginPage> {
           },
         ),
         onFocusChange: (pass) {
-          setState(() {
-            passFocus = pass;
-          });
+          setState(() => passFocus = pass);
         },
       ),
     );
@@ -205,7 +190,6 @@ class _LoginPageState extends State<LoginPage> {
           return;
         }
         _getOnPressed();
-        _clearField();
       },
       style: ElevatedButton.styleFrom(
         primary: blueDarkLight,
@@ -219,67 +203,51 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _bottomRegister() {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 8.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(
-            Constants.donT,
-            style: h3TextStyle,
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RegistrationPage(),
           ),
-          SizedBox(width: 4.w),
-          InkWell(
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => admin_Registration())),
-            child: Text(
-              Constants.register,
-              style: h5TextStyle,
+        );
+      },
+      child: Container(
+        color: blueDarkLight,
+        padding: EdgeInsets.only(bottom: 24.h, top: 12.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              Constants.donT,
+              style: h3WhiteTextStyle,
             ),
-          ),
-        ],
+            SizedBox(width: 6.w),
+            Text(
+              Constants.register,
+              style: h5WhiteTextStyle,
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  _clearField(){
+  _clearField() {
     emailController.clear();
     passwordController.clear();
   }
 
   _getOnPressed() async {
     try {
-      print(email);
-      print(password);
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      print("++++++++");
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => DashBoardPage()));
-    } on FirebaseAuthException catch (e) {
-      print(e.toString());
-      if (e.code == Constants.userNotFound) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          margin: EdgeInsets.only(left: 120, right: 120, bottom: 20),
-          behavior: SnackBarBehavior.floating,
-          shape: StadiumBorder(),
-          backgroundColor: Colors.white,
-          content: Text(
-            Constants.userNotFound,
-            style: TextStyle(color: Colors.black),
-            textAlign: TextAlign.center,
-          ),
-        ));
-      } else if (e.code == Constants.wrongPass) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(Constants.invalidPass,
-                style: TextStyle(color: Colors.black),
-                textAlign: TextAlign.center)));
-      } else if (e.code == Constants.invalidEmail) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(Constants.invalidEmail)));
-      }
+      await UserAuth().userSignIn(
+        email: email,
+        password: password,
+      );
+      _clearField();
+    } catch (e) {
+      Global.showSnackBar(context, e.toString());
     }
   }
 }

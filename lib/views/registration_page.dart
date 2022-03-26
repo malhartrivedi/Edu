@@ -1,18 +1,35 @@
+import 'package:admin/model/user_data_model.dart';
+import 'package:admin/service/user_auth.dart';
 import 'package:admin/utils/app_asset_path.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/constants.dart';
+import 'package:admin/utils/global.dart';
 import 'package:admin/widgets/my_textstyle.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class admin_Registration extends StatefulWidget {
-  const admin_Registration({Key? key}) : super(key: key);
+class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({Key? key}) : super(key: key);
 
   @override
-  _admin_RegistrationState createState() => _admin_RegistrationState();
+  _RegistrationPageState createState() => _RegistrationPageState();
 }
 
-class _admin_RegistrationState extends State<admin_Registration> {
+class _RegistrationPageState extends State<RegistrationPage> {
+  final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final schoolController = TextEditingController();
+  final phoneController = TextEditingController();
+  final addressController = TextEditingController();
+  final cityController = TextEditingController();
+  final stateController = TextEditingController();
+  final postController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
   bool nameFocus = false;
   bool emailFocus = false;
   bool schoolFocus = false;
@@ -25,27 +42,34 @@ class _admin_RegistrationState extends State<admin_Registration> {
   bool confirmFocus = false;
   bool passFocus = false;
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmController = TextEditingController();
+  String get name => nameController.value.text;
+
+  String get email => emailController.value.text;
+
+  String get school => schoolController.value.text;
+
+  String get phone => phoneController.value.text;
+
+  String get address => addressController.value.text;
+
+  String get city => cityController.value.text;
+
+  String get state => stateController.value.text;
+
+  String get post => postController.value.text;
+
+  String get password => passwordController.value.text;
+
+  String get confirmPassword => confirmPasswordController.value.text;
 
   onConfirms(String confirms) {
     setState(() {
       _isConfirmPass = false;
-      if (passwordController.text == confirmController.text) {
+      if (password == confirmPassword) {
         _isConfirmPass = true;
       }
     });
   }
-
-/*  onName(String name){
-    setState(() {
-      _isNameValid = false;
-      if(nameController.text == ){
-        _isNameValid = true;
-      }
-    });
-  }*/
 
   String _password = '';
   bool _isVisible = false;
@@ -53,16 +77,14 @@ class _admin_RegistrationState extends State<admin_Registration> {
   bool _isConfirmPass = false;
   bool _isNameValid = false;
 
-  final formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: whiteOff,
-          body: _getBody(),
+      child: Scaffold(
+        backgroundColor: whiteOff,
+        body: SafeArea(
+          child: _getBody(),
         ),
       ),
     );
@@ -100,7 +122,7 @@ class _admin_RegistrationState extends State<admin_Registration> {
           SizedBox(height: 16.h),
           _confirmTextField(),
           SizedBox(height: 36.h),
-          _RegisterButton(),
+          _registerButton(),
           SizedBox(height: 36.h),
           _backToLogin(),
         ],
@@ -131,16 +153,11 @@ class _admin_RegistrationState extends State<admin_Registration> {
   }
 
   _nameTextField() {
-    return Container(
-      padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(
-        color: greyLight30,
-        borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: nameFocus == true ? blueDark : white),
-      ),
+    return _getContainerOutLine(
+      hasFocus: nameFocus == true,
       child: Focus(
         child: TextFormField(
-          //onChanged: (name) => onName(name),
+          controller: nameController,
           keyboardType: TextInputType.text,
           style: h2TextStyle,
           decoration: InputDecoration(
@@ -157,7 +174,6 @@ class _admin_RegistrationState extends State<admin_Registration> {
               color: greyDark,
             ),
           ),
-
           validator: (name) {
             if (name!.isEmpty) {
               return Constants.enterName;
@@ -177,15 +193,11 @@ class _admin_RegistrationState extends State<admin_Registration> {
   }
 
   _emailTextField() {
-    return Container(
-      padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(
-        color: greyLight30,
-        borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: emailFocus == true ? blueDark : white),
-      ),
+    return _getContainerOutLine(
+      hasFocus: emailFocus == true,
       child: Focus(
         child: TextFormField(
+          controller: emailController,
           keyboardType: TextInputType.emailAddress,
           style: h2TextStyle,
           decoration: InputDecoration(
@@ -221,15 +233,11 @@ class _admin_RegistrationState extends State<admin_Registration> {
   }
 
   _schoolTextField() {
-    return Container(
-      padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(
-        color: greyLight30,
-        borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: schoolFocus == true ? blueDark : white),
-      ),
+    return _getContainerOutLine(
+      hasFocus: schoolFocus == true,
       child: Focus(
         child: TextFormField(
+          controller: schoolController,
           keyboardType: TextInputType.text,
           style: h2TextStyle,
           decoration: InputDecoration(
@@ -263,15 +271,11 @@ class _admin_RegistrationState extends State<admin_Registration> {
   }
 
   _phoneTextField() {
-    return Container(
-      padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(
-        color: greyLight30,
-        borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: phoneFocus == true ? blueDark : white),
-      ),
+    return _getContainerOutLine(
+      hasFocus: phoneFocus == true,
       child: Focus(
         child: TextFormField(
+          controller: phoneController,
           keyboardType: TextInputType.text,
           style: h2TextStyle,
           decoration: InputDecoration(
@@ -307,15 +311,11 @@ class _admin_RegistrationState extends State<admin_Registration> {
   }
 
   _addressTextField() {
-    return Container(
-      padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(
-        color: greyLight30,
-        borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: addressFocus == true ? blueDark : white),
-      ),
+    return _getContainerOutLine(
+      hasFocus: addressFocus == true,
       child: Focus(
         child: TextFormField(
+          controller: addressController,
           keyboardType: TextInputType.text,
           style: h2TextStyle,
           decoration: InputDecoration(
@@ -349,15 +349,11 @@ class _admin_RegistrationState extends State<admin_Registration> {
   }
 
   _cityTextField() {
-    return Container(
-      padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(
-        color: greyLight30,
-        borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: cityFocus == true ? blueDark : white),
-      ),
+    return _getContainerOutLine(
+      hasFocus: cityFocus == true,
       child: Focus(
         child: TextFormField(
+          controller: cityController,
           keyboardType: TextInputType.text,
           style: h2TextStyle,
           decoration: InputDecoration(
@@ -391,15 +387,11 @@ class _admin_RegistrationState extends State<admin_Registration> {
   }
 
   _stateTextField() {
-    return Container(
-      padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(
-        color: greyLight30,
-        borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: stateFocus == true ? blueDark : white),
-      ),
+    return _getContainerOutLine(
+      hasFocus: stateFocus == true,
       child: Focus(
         child: TextFormField(
+            controller: stateController,
             keyboardType: TextInputType.text,
             style: h2TextStyle,
             decoration: InputDecoration(
@@ -432,15 +424,11 @@ class _admin_RegistrationState extends State<admin_Registration> {
   }
 
   _postTextField() {
-    return Container(
-      padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(
-        color: greyLight30,
-        borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: postFocus == true ? blueDark : white),
-      ),
+    return _getContainerOutLine(
+      hasFocus: postFocus == true,
       child: Focus(
         child: TextFormField(
+            controller: postController,
             keyboardType: TextInputType.number,
             style: h2TextStyle,
             decoration: InputDecoration(
@@ -473,13 +461,8 @@ class _admin_RegistrationState extends State<admin_Registration> {
   }
 
   _passwordTextField() {
-    return Container(
-      padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(
-        color: greyLight30,
-        borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: passwordFocus == true ? blueDark : white),
-      ),
+    return _getContainerOutLine(
+      hasFocus: passwordFocus == true,
       child: Focus(
         child: TextFormField(
           controller: passwordController,
@@ -494,15 +477,10 @@ class _admin_RegistrationState extends State<admin_Registration> {
                   _isVisible = !_isVisible;
                 });
               },
-              icon: _isVisible
-                  ? const Icon(
-                      Icons.visibility,
-                      color: Colors.black,
-                    )
-                  : const Icon(
-                      Icons.visibility_off,
-                      color: Colors.grey,
-                    ),
+              icon: Icon(
+                _isVisible ? Icons.visibility : Icons.visibility_off,
+                color: _isVisible ? Colors.black : Colors.grey,
+              ),
             ),
             contentPadding:
                 EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
@@ -532,16 +510,11 @@ class _admin_RegistrationState extends State<admin_Registration> {
   }
 
   _confirmTextField() {
-    return Container(
-      padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(
-        color: greyLight30,
-        borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: confirmFocus == true ? blueDark : white),
-      ),
+    return _getContainerOutLine(
+      hasFocus: confirmFocus == true,
       child: Focus(
         child: TextFormField(
-          controller: confirmController,
+          controller: confirmPasswordController,
           obscureText: !_isConfirmVisible,
           onChanged: (confirms) => onConfirms(confirms),
           keyboardType: TextInputType.visiblePassword,
@@ -576,15 +549,13 @@ class _admin_RegistrationState extends State<admin_Registration> {
     );
   }
 
-  _RegisterButton() {
+  _registerButton() {
     return ElevatedButton(
       onPressed: () {
         if (!formKey.currentState!.validate()) {
           return;
         }
-        setState(() {
-          Navigator.pop(context, formKey);
-        });
+        _registerUser();
       },
       style: ElevatedButton.styleFrom(
         primary: blueDarkLight,
@@ -615,5 +586,46 @@ class _admin_RegistrationState extends State<admin_Registration> {
         ),
       ],
     );
+  }
+
+  _getContainerOutLine({required Widget child, required bool hasFocus}) {
+    return Container(
+      padding: EdgeInsets.all(8.w),
+      decoration: BoxDecoration(
+        color: greyLight30,
+        borderRadius: BorderRadius.all(Radius.circular(14.w)),
+        border: Border.all(color: confirmFocus == true ? blueDark : white),
+      ),
+      child: child,
+    );
+  }
+
+  _registerUser() async {
+    try {
+      UserCredential userCred = await UserAuth().userSignIn(
+        email: email,
+        password: password,
+      );
+      Navigator.of(context).pop();
+      UserDataModel userDataModel = UserDataModel(
+        uid: userCred.user!.uid,
+        name: name,
+        email: email,
+        school: school,
+        phone: int.parse(phone),
+        address: address,
+        city: city,
+        state: state,
+        post: int.parse(post),
+      );
+
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc('admin')
+          .collection('admin')
+          .add(userDataModel.toJson());
+    } catch (e) {
+      Global.showSnackBar(context, e.toString());
+    }
   }
 }

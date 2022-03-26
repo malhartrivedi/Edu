@@ -33,9 +33,13 @@ class Constants {
   static String validName = 'Please Enter valid Name';
   static String validEmail = 'Please Enter valid Email';
   static String invalidEmail = 'Invalid email';
-  static String invalidPass = 'Invalid password';
+  static String invalidPassword = 'Invalid password';
   static String userNotFound = 'User Not Found';
   static String wrongPass = 'wrong-password';
   static String validPhone = 'Please Enter valid Phone Number';
   static String emailValidator =  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+  static String networkIssue = 'Network Issue';
+  static String userNotExist = 'User not exist';
+  static String timeoutMessage = 'Timeout, Try again later.';
+  static String emailAlreadyRegistered = 'Email already registered';
 }

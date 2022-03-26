@@ -1,4 +1,5 @@
-import 'package:admin/views/login_page.dart';
+import 'package:admin/service/user_auth.dart';
+import 'package:admin/utils/global.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardPage extends StatefulWidget {
@@ -14,12 +15,18 @@ class _DashBoardPageState extends State<DashBoardPage> {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          onPressed: (){
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LoginPage()), (route) => false);
-          },
+          onPressed: _logout,
           child: Text('Logout'),
-        )
+        ),
       ),
     );
+  }
+
+  _logout() {
+    try {
+      UserAuth().logout();
+    } catch (e) {
+      Global.showSnackBar(context, e.toString());
+    }
   }
 }
