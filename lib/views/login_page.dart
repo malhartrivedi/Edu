@@ -23,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
 
   bool _isVisible = false;
+  bool _isEmail = false;
   bool emailFocus = false;
   bool passFocus = false;
 
@@ -98,13 +99,14 @@ class _LoginPageState extends State<LoginPage> {
       ),
       child: Focus(
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: emailController,
           keyboardType: TextInputType.emailAddress,
           style: h2TextStyle,
           decoration: InputDecoration(
             suffixIcon: Icon(
               Icons.email,
-              color: greyDark,
+              color:  _isEmail == true ? blueDark : grey,
             ),
             contentPadding: EdgeInsets.symmetric(
               vertical: 6.h,
@@ -119,8 +121,10 @@ class _LoginPageState extends State<LoginPage> {
           ),
           validator: (email) {
             if (email!.isEmpty) {
+              _isEmail = false;
               return Constants.enterEmail;
             } else if (!RegExp(Constants.emailValidator).hasMatch(email)) {
+              _isEmail = true;
               return Constants.validEmail;
             }
             return null;

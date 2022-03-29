@@ -39,3 +39,40 @@ final h5WhiteTextStyle = TextStyle(
   fontWeight: fwSemiBold,
   fontSize: 12.sp,
 );
+
+final ExtraBoldTextStyle = TextStyle(
+  fontWeight: fwBold,
+);
+
+final ThemeBoldTextStyle = TextStyle(
+  fontWeight: fwExtraBold,
+  color:blueDark,
+  fontSize: 70.sp
+);
+
+final ThemeNameBoldTextStyle = TextStyle(
+    fontWeight: fwBold,
+    color:blueDark,
+    fontSize: 24.sp
+);
+
+final ThemeEmailBoldTextStyle = TextStyle(
+    color:blueDark,
+);
+
+final labelTextStyle = TextStyle(
+    color:greyText,
+  fontWeight: fwSemiBold
+);
+
+final sizeTextStyle = TextStyle(
+    fontSize: 12.sp,
+    color: white
+);
+
+final logTextStyle = TextStyle(
+    fontSize: 14.sp,
+    color: red
+);
+
+

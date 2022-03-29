@@ -7,6 +7,7 @@ import 'package:admin/utils/global.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -31,7 +32,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final confirmPasswordController = TextEditingController();
 
   bool nameFocus = false;
-  bool emailFocus = false;
+  bool  emailFocus = false;
   bool schoolFocus = false;
   bool phoneFocus = false;
   bool addressFocus = false;
@@ -76,6 +77,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
   bool _isConfirmVisible = false;
   bool _isConfirmPass = false;
   bool _isNameValid = false;
+  bool _isEmailValid = false;
+  bool _isSchoolValid = false;
+  bool _isPhoneValid = false;
+  bool _isAddressValid = false;
+  bool _isCityValid = false;
+  bool _isStateValid = false;
+  bool _isPostValid = false;
 
   @override
   Widget build(BuildContext context) {
@@ -157,13 +165,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
       hasFocus: nameFocus == true,
       child: Focus(
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: nameController,
           keyboardType: TextInputType.text,
           style: h2TextStyle,
           decoration: InputDecoration(
             suffixIcon: Icon(
               Icons.check,
-              color: _isNameValid ? greyDark : grey,
+              color: _isNameValid == true ? blueDark : grey,
             ),
             contentPadding:
                 EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
@@ -176,8 +185,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           validator: (name) {
             if (name!.isEmpty) {
+              _isNameValid = false;
               return Constants.enterName;
             } else if (name.trim().length < 3) {
+              _isNameValid = true;
               return Constants.validName;
             }
             return null;
@@ -197,13 +208,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
       hasFocus: emailFocus == true,
       child: Focus(
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: emailController,
           keyboardType: TextInputType.emailAddress,
           style: h2TextStyle,
           decoration: InputDecoration(
             suffixIcon: Icon(
               Icons.email,
-              color: greyDark,
+              color: _isEmailValid == true ? blueDark : grey,
             ),
             contentPadding:
                 EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
@@ -216,8 +228,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           validator: (email) {
             if (email!.isEmpty) {
+              _isEmailValid = false;
               return Constants.enterEmail;
             } else if (!RegExp(Constants.emailValidator).hasMatch(email)) {
+              _isEmailValid = true;
               return Constants.validEmail;
             }
             return null;
@@ -237,13 +251,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
       hasFocus: schoolFocus == true,
       child: Focus(
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: schoolController,
           keyboardType: TextInputType.text,
           style: h2TextStyle,
           decoration: InputDecoration(
             suffixIcon: Icon(
               Icons.check,
-              color: greyDark,
+              color: _isSchoolValid == true ? blueDark : grey,
             ),
             contentPadding:
                 EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
@@ -256,7 +271,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           validator: (school) {
             if (school!.isEmpty) {
+              _isSchoolValid = false;
               return Constants.enterSchool;
+            } else if(school.isNotEmpty){
+              _isSchoolValid = true;
             }
             return null;
           },
@@ -275,13 +293,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
       hasFocus: phoneFocus == true,
       child: Focus(
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: phoneController,
-          keyboardType: TextInputType.text,
+          keyboardType: TextInputType.phone,
           style: h2TextStyle,
           decoration: InputDecoration(
             suffixIcon: Icon(
               Icons.phone,
-              color: greyDark,
+              color: _isPhoneValid == true ? blueDark : grey,
             ),
             contentPadding:
                 EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
@@ -294,8 +313,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           validator: (phone) {
             if (phone!.isEmpty) {
+              _isPhoneValid = false;
               return Constants.enterPhone;
             } else if (phone.trim().length < 10) {
+              _isPhoneValid = true;
               return Constants.validPhone;
             }
             return null;
@@ -315,13 +336,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
       hasFocus: addressFocus == true,
       child: Focus(
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: addressController,
           keyboardType: TextInputType.text,
           style: h2TextStyle,
           decoration: InputDecoration(
             suffixIcon: Icon(
               Icons.home,
-              color: greyDark,
+              color: _isAddressValid == true ? blueDark : grey,
             ),
             contentPadding:
                 EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
@@ -334,7 +356,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           validator: (address) {
             if (address!.isEmpty) {
+              _isAddressValid = false;
               return Constants.enterAddress;
+            } else if(address.isNotEmpty){
+              _isAddressValid = true;
             }
             return null;
           },
@@ -353,13 +378,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
       hasFocus: cityFocus == true,
       child: Focus(
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           controller: cityController,
           keyboardType: TextInputType.text,
           style: h2TextStyle,
           decoration: InputDecoration(
             suffixIcon: Icon(
               Icons.check,
-              color: greyDark,
+              color:  _isCityValid == true ? blueDark : grey,
             ),
             contentPadding:
                 EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
@@ -372,7 +398,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
           ),
           validator: (city) {
             if (city!.isEmpty) {
+              _isCityValid = false;
               return Constants.enterCity;
+            }else if(city.isNotEmpty){
+              _isCityValid = true;
             }
             return null;
           },
@@ -391,13 +420,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
       hasFocus: stateFocus == true,
       child: Focus(
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: stateController,
             keyboardType: TextInputType.text,
             style: h2TextStyle,
             decoration: InputDecoration(
               suffixIcon: Icon(
                 Icons.check,
-                color: greyDark,
+                color:  _isStateValid == true ? blueDark : grey,
               ),
               contentPadding:
                   EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
@@ -410,7 +440,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ),
             validator: (state) {
               if (state!.isEmpty) {
+                _isStateValid = false;
                 return Constants.enterState;
+              } else if(state.isNotEmpty){
+                _isStateValid = true;
               }
               return null;
             }),
@@ -428,13 +461,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
       hasFocus: postFocus == true,
       child: Focus(
         child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: postController,
             keyboardType: TextInputType.number,
             style: h2TextStyle,
             decoration: InputDecoration(
               suffixIcon: Icon(
                 Icons.check,
-                color: greyDark,
+                color:  _isPostValid == true ? blueDark : grey,
               ),
               contentPadding:
                   EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
@@ -447,7 +481,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ),
             validator: (post) {
               if (post!.isEmpty) {
+                _isPostValid = false;
                 return Constants.enterPost;
+              } else if(post.isNotEmpty){
+                _isPostValid = true;
               }
               return null;
             }),
@@ -511,7 +548,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   _confirmTextField() {
     return _getContainerOutLine(
-      hasFocus: confirmFocus == true,
+      hasFocus: confirmFocus,
       child: Focus(
         child: TextFormField(
           controller: confirmPasswordController,
@@ -521,7 +558,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           style: h2TextStyle,
           decoration: InputDecoration(
             suffixIcon: Icon(Icons.check,
-                color: _isConfirmPass ? greenLight : Colors.grey),
+                color: _isConfirmPass ? blueDark : Colors.grey),
             contentPadding:
                 EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
             focusedBorder: InputBorder.none,
@@ -594,7 +631,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       decoration: BoxDecoration(
         color: greyLight30,
         borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: confirmFocus == true ? blueDark : white),
+        border: Border.all(color: hasFocus ? blueDark : white),
       ),
       child: child,
     );
@@ -602,7 +639,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   _registerUser() async {
     try {
-      UserCredential userCred = await UserAuth().userSignIn(
+      UserCredential userCred = await UserAuth().userSignUp(
         email: email,
         password: password,
       );
@@ -621,7 +658,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
       FirebaseFirestore.instance
           .collection('users')
-          .doc('admin')
+          .doc('users')
           .collection('admin')
           .add(userDataModel.toJson());
     } catch (e) {
