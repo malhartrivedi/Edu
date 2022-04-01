@@ -45,20 +45,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
         currentIndex: currentIndex,
         onTap: (index) => setState(() => currentIndex = index),
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.all(4),
-                child: Icon( currentIndex == 0? icHomeFilled : icHome),
-              ),
-            label: Constants.home,
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.all(4),
-              child: Icon(currentIndex == 1? icProfileFilled : icProfile),
-            ),
-            label: Constants.profile,
-          ),
+          _getBottomNavigationBarItem(0,icHomeFilled,icHome,Constants.home),
+          _getBottomNavigationBarItem(1,icProfileFilled,icProfile,Constants.profile),
         ],
       ),
     );
@@ -70,5 +58,15 @@ class _DashBoardPageState extends State<DashBoardPage> {
     } catch (e) {
       Global.showSnackBar(context, e.toString());
     }
+  }
+
+  _getBottomNavigationBarItem(int indexValue,IconData firstIcon,IconData secondIcon, String label){
+    return BottomNavigationBarItem(
+      icon: Padding(
+        padding: EdgeInsets.all(4),
+        child: Icon(currentIndex == indexValue? firstIcon : secondIcon),
+      ),
+      label: label,
+    );
   }
 }

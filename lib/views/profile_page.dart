@@ -1,5 +1,9 @@
+import 'package:admin/service/user_auth.dart';
 import 'package:admin/utils/app_color.dart';
+import 'package:admin/utils/app_icon.dart';
 import 'package:admin/utils/constants.dart';
+import 'package:admin/views/change_password.dart';
+import 'package:admin/views/edit_profile.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +19,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    var Firstname = Constants.NameInitial;
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
@@ -28,19 +33,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: greyWhite,
                 child: Center(
                   child: Text(
-                    'M',
+                    '${Firstname[0].toUpperCase()}',
                     style: ThemeBoldTextStyle,
                   ),
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(70.w),
+                  borderRadius: BorderRadius.circular(70.w),
                 ),
                 elevation: 6,
               ),
             ),
             SizedBox(height: 20.h),
-            Text(Constants.Name, style: ThemeNameBoldTextStyle),
+            Text(Constants.NameInitial, style: ThemeNameBoldTextStyle),
             Text(Constants.NameEmail, style: ThemeEmailBoldTextStyle),
             SizedBox(height: 32.h),
             _getDivider(),
@@ -64,22 +68,44 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: (){},
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(greyGreenDarkLight)),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditProfile(),
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 6.0,
+                        primary: greyGreenDarkLight,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                       child: Text(
                         Constants.editProfile,
-                        style: sizeTextStyle,
+                        style: sizeWhiteTextStyle,
                       ),
                     ),
                   ),
                   SizedBox(width: 20),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: (){},
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(greyGreenDarkLight)),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChangePassword(),
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 6.0,
+                        primary: greyGreenDarkLight,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                       child: Text(
                         Constants.changePassword,
-                        style: sizeTextStyle,
+                        style: sizeWhiteTextStyle,
                       ),
                     ),
                   ),
@@ -92,8 +118,14 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: ElevatedButton(
-                  onPressed: (){},
-                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(greyWhite)),
+                  onPressed: () => _showDialog(),
+                  style: ElevatedButton.styleFrom(
+                    elevation: 6.0,
+                    primary: greyWhite,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                   child: Text(
                     Constants.logoutB,
                     style: logTextStyle,
@@ -109,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   _getDivider() {
-    return Divider(color: blueDarkLight2,height: 1);
+    return Divider(color: blueDarkLight2, height: 1);
   }
 
   _getDetailItem(String label, String value) {
@@ -124,6 +156,40 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Text(value,
                 textAlign: TextAlign.end, style: ThemeEmailBoldTextStyle),
           ),
+        ],
+      ),
+    );
+  }
+
+  _showDialog() {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.w)),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(Constants.logout, style: logoutTextStyle),
+            Icon(icLogout, color: redLight, size: 22.sp),
+          ],
+        ),
+        content: Text(Constants.logoutSure, style: sizeTextStyle),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Padding(
+              padding: EdgeInsets.only(left: 50.w),
+              child: Text(Constants.no, style: NoTextStyle),
+            ),
+          ),
+          TextButton(
+            onPressed: () => setState(() {
+              UserAuth().logout();
+              Navigator.pop(context);
+            }),
+            child: Text(Constants.yes, style: YesTextStyle),
+          )
         ],
       ),
     );

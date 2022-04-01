@@ -72,12 +72,19 @@ flutter:
   assets:
     - assets/appIcons/icon_admin.png
     - assets/appIcons/icon_app.png
+    - assets/image/family.png
+    - assets/image/school.png
+    - assets/image/teacher.png
+    - assets/image/blackboard.png
 
 
   fonts:
     - family: icomoon
       fonts:
         - asset: assets/icomoon.ttf
+    - family: icomoonadd
+      fonts:
+        - asset: assets/icomoonadd.ttf
 
   # example:
   # fonts:

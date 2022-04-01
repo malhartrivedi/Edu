@@ -62,10 +62,10 @@ final ThemeEmailBoldTextStyle = TextStyle(
 
 final labelTextStyle = TextStyle(
     color:greyText,
-  fontWeight: fwSemiBold
+    fontWeight: fwSemiBold
 );
 
-final sizeTextStyle = TextStyle(
+final sizeWhiteTextStyle = TextStyle(
     fontSize: 12.sp,
     color: white
 );
@@ -73,6 +73,56 @@ final sizeTextStyle = TextStyle(
 final logTextStyle = TextStyle(
     fontSize: 14.sp,
     color: red
+);
+
+final logoutTextStyle = TextStyle(
+    fontSize: 18.sp,
+    color: redLight,
+    fontWeight: fwBold
+);
+
+final NoTextStyle = TextStyle(
+    color:greyText,
+    fontWeight: fwBold,
+);
+
+final YesTextStyle = TextStyle(
+  color:blueDark,
+  fontWeight: fwBold,
+);
+
+final sizeTextStyle = TextStyle(
+  fontSize: 14.sp,
+  color: black
+);
+
+final schoolTextStyle = TextStyle(
+  color:blueDark,
+  fontWeight: fwExtraBold,
+  fontSize: 24.sp
+);
+
+final teacherTextStyle = TextStyle(
+    color:white,
+    fontWeight: fwExtraBold,
+    fontSize: 18.sp,
+);
+
+final parentTextStyle = TextStyle(
+    color:white,
+    fontWeight: fwExtraBold,
+    fontSize: 18.sp
+);
+
+final classesTextStyle = TextStyle(
+  color:blueDark,
+  fontWeight: fwExtraBold,
+  fontSize: 22.sp,
+);
+
+final iconClassTextStyle = TextStyle(
+  color:white,
+  fontWeight: fwBold,
 );
 
 

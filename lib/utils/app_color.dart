@@ -10,6 +10,7 @@ const Color blueDark = Color(0xff193441);
 
 const Color white = Colors.white;
 const Color greyGreenDarkLight = Color(0xff96A99E);
+const Color greyGr = Color(0xff96A89E);
 const Color blueDarkLight2 = Color(0xff46606D);
 const Color blueDarkLight3 = Color(0xff96A99E);
 const Color greyText = Color(0xff96A99E);
@@ -22,4 +23,7 @@ const Color greyLight = Color(0xffd2d2d2);
 const Color greyLight30 = Color(0x30d2d2d2);
 const Color greyLight40 = Color(0x40d2d2d2);
 const Color greyLight60 = Color(0x60d2d2d2);
+const Color redDark = Color(0x60AF513A);
+const Color redLight = Color(0xffAF513A);
 const Color red = Colors.redAccent;
+const Color black = Colors.black;
