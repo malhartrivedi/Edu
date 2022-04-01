@@ -4,6 +4,7 @@ import 'package:admin/utils/app_icon.dart';
 import 'package:admin/utils/constants.dart';
 import 'package:admin/views/change_password.dart';
 import 'package:admin/views/edit_profile.dart';
+import 'package:admin/utils/global.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -184,14 +185,22 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           TextButton(
-            onPressed: () => setState(() {
-              UserAuth().logout();
+            onPressed: () {
               Navigator.pop(context);
-            }),
+              _logout();
+            },
             child: Text(Constants.yes, style: YesTextStyle),
           )
         ],
       ),
     );
+  }
+
+  _logout() {
+    try {
+      UserAuth().logout();
+    } catch (e) {
+      Global.showSnackBar(context, e.toString());
+    }
   }
 }
