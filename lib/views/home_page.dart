@@ -17,11 +17,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final formKey = GlobalKey<FormState>();
+  final classController = TextEditingController();
+
+  String get classes => classController.value.text;
+  bool ClassFocus = false;
+  bool _isClassValid = false;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: whiteOff,
-      body: _getHomeBody(),
+    return Form(
+      key: formKey,
+      child: Scaffold(
+        backgroundColor: whiteOff,
+        body: _getHomeBody(),
+      ),
     );
   }
 
@@ -45,7 +55,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(height: 12.h),
                   _getClasses(),
-
                 ],
               ),
             ),
@@ -88,9 +97,7 @@ class _HomePageState extends State<HomePage> {
         width: 180.h,
         child: InkWell(
           onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TeacherPage())),
+              context, MaterialPageRoute(builder: (context) => TeacherPage())),
           child: Card(
             elevation: 6,
             color: greyWhite,
@@ -123,9 +130,7 @@ class _HomePageState extends State<HomePage> {
         width: 180.h,
         child: InkWell(
           onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ParentPage())),
+              context, MaterialPageRoute(builder: (context) => ParentPage())),
           child: Card(
             elevation: 6,
             color: greyWhite,
@@ -190,36 +195,169 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(width: 6.w),
                 Text(Constants.classes, style: classesTextStyle),
                 SizedBox(width: 170),
-                Icon(
-                  icAdd,
-                  color: blueDarkLight2,
+                InkWell(
+                  onTap: () => _getBottomSheet(),
+                  child: Icon(
+                    icAdd,
+                    color: blueDarkLight2,
+                  ),
                 ),
               ],
             ),
           ),
-          ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: 3,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8,horizontal: 14),
-                        child: _classesName(),
-                      ),
-                      Text('Class 1',style: ThemeEmailBoldTextStyle,),
-                    ],
-                  ),
-                  Divider(color: blueDarkLight2, height: 1),
-                ],
-              );
-            },
-          ),
+          _getClassesListView(),
         ],
       ),
+    );
+  }
+
+  _getBottomSheet() {
+    return showModalBottomSheet(
+      backgroundColor: whiteOff,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20))
+    ),
+      context: context,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          child: SizedBox(
+            height: 242.h,
+            child: Column(
+              children: [
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 8.h, horizontal: 24.w),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Create Class',
+                        style: classTextStyle,
+                      ),
+                      InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: Icon(Icons.close)),
+                    ],
+                  ),
+                ),
+                Divider(color: blueDarkLight2, height: 1),
+                SizedBox(height: 8.h),
+                _createClassesTextField(),
+                SizedBox(height: 8.h),
+                _submitButton(),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _createClassesTextField() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+      child: _getContainerOutLine(
+        hasFocus: ClassFocus == true,
+        child: Focus(
+          child: TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            controller: classController,
+            keyboardType: TextInputType.text,
+            style: h2TextStyle,
+            decoration: InputDecoration(
+              suffixIcon: Icon(
+                Icons.check,
+                color: _isClassValid == true ? blueDark : grey,
+              ),
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              labelText: Constants.classes,
+              labelStyle: TextStyle(
+                color: greyDark,
+              ),
+            ),
+            validator: (name) {
+              if (name!.isEmpty) {
+                _isClassValid = false;
+                return Constants.enterName;
+              } else if (name.trim().length < 6) {
+                _isClassValid = true;
+                return Constants.validName;
+              }
+              return null;
+            },
+          ),
+          onFocusChange: (name) {
+            setState(() {
+              ClassFocus = name;
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  _submitButton() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
+      child: ElevatedButton(
+        onPressed: () {
+          if (!formKey.currentState!.validate()) {
+            return;
+          } else if (classController.text.isNotEmpty) {
+            return Navigator.pop(context);
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          primary: greyGreenDarkLight,
+          minimumSize: Size.fromHeight(50.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: Text(Constants.submit),
+      ),
+    );
+  }
+
+  _getContainerOutLine({required Widget child, required bool hasFocus}) {
+    return Container(
+      padding: EdgeInsets.all(8.w),
+      decoration: BoxDecoration(
+        color: greyLight30,
+        borderRadius: BorderRadius.all(Radius.circular(14.w)),
+        border: Border.all(color: hasFocus ? blueDark : white),
+      ),
+      child: child,
+    );
+  }
+
+  _getClassesListView() {
+    return ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: 3,
+      itemBuilder: (context, index) {
+        return Column(
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+                  child: _classesName(),
+                ),
+                Text(
+                  'Class 1',
+                  style: ThemeEmailBoldTextStyle,
+                ),
+              ],
+            ),
+            Divider(color: blueDarkLight2, height: 1),
+          ],
+        );
+      },
     );
   }
 
@@ -233,7 +371,7 @@ class _HomePageState extends State<HomePage> {
         child: Center(
           child: Text(
             '${Firstname[0].toUpperCase()}',
-              style: iconClassTextStyle,
+            style: iconClassTextStyle,
           ),
         ),
         shape: RoundedRectangleBorder(
@@ -243,5 +381,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 }

@@ -125,4 +125,10 @@ final iconClassTextStyle = TextStyle(
   fontWeight: fwBold,
 );
 
+final classTextStyle = TextStyle(
+    color:blueDark,
+    fontWeight: fwExtraBold,
+    fontSize: 22.sp
+);
+
 
