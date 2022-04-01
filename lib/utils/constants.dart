@@ -41,6 +41,7 @@ class Constants {
   static String state = 'State';
   static String stateB = 'STATE';
   static String post = 'Post Code';
+  static String institute = 'Institute Id';
   static String postB = 'POST-CODE';
   static String already = 'Already have and Account?';
   static String logoutSure = 'Are you sure, you want to logout?';
@@ -54,6 +55,7 @@ class Constants {
   static String enterCity = 'Please Enter City';
   static String enterState = 'Please Enter State';
   static String enterPost = 'Please Enter Post Code';
+  static String enterInstitute = 'Please Enter Institute Id';
   static String enterPassword = 'Please enter Password';
   static String validPassword = 'Password must be at least 6 characters in length';
   static String validConfirmPassword = 'Confirmation password not match the password';

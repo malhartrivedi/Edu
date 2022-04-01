@@ -102,18 +102,6 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  _getContainerOutLine({required Widget child, required bool hasFocus}) {
-    return Container(
-      padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(
-        color: greyLight30,
-        borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: hasFocus ? blueDark : white),
-      ),
-      child: child,
-    );
-  }
-
   _nameTextField() {
     return _getContainerOutLine(
       hasFocus: nameFocus == true,
@@ -466,6 +454,18 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
       child: Text(Constants.submit),
+    );
+  }
+
+  _getContainerOutLine({required Widget child, required bool hasFocus}) {
+    return Container(
+      padding: EdgeInsets.all(8.w),
+      decoration: BoxDecoration(
+        color: greyLight30,
+        borderRadius: BorderRadius.all(Radius.circular(14.w)),
+        border: Border.all(color: hasFocus ? blueDark : white),
+      ),
+      child: child,
     );
   }
 }
