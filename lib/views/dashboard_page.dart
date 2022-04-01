@@ -10,7 +10,6 @@ import 'package:flutter/widgets.dart';
 
 class DashBoardPage extends StatefulWidget {
   const DashBoardPage({Key? key, required this.uid}) : super(key: key);
-
   final String uid;
 
   @override
@@ -22,21 +21,22 @@ class _DashBoardPageState extends State<DashBoardPage> {
   bool iconProfileFocus = false;
 
   int currentIndex = 0;
-  final screens = [
-    HomePage(),
-    ProfilePage(),
-  ];
 
-  @override
-  void initState() {
-    super.initState();
-
+  _getSelectedBody(String uid){
+    switch (currentIndex){
+      case 0:
+        return HomePage(uid: uid);
+      case 1:
+        return ProfilePage(uid: uid);
+      default:
+        return HomePage(uid: uid);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[currentIndex],
+      body: _getSelectedBody(widget.uid),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: blueDarkLight2,
         selectedItemColor: white,

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key,required String uid}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -213,6 +213,7 @@ class _HomePageState extends State<HomePage> {
 
   _getBottomSheet() {
     return showModalBottomSheet(
+      isScrollControlled: true,
       backgroundColor: whiteOff,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20))
@@ -220,32 +221,35 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (BuildContext context) {
         return SingleChildScrollView(
-          child: SizedBox(
-            height: 242.h,
-            child: Column(
-              children: [
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 8.h, horizontal: 24.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Create Class',
-                        style: classTextStyle,
-                      ),
-                      InkWell(
-                          onTap: () => Navigator.pop(context),
-                          child: Icon(Icons.close)),
-                    ],
+          child: Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: SizedBox(
+              height: 242.h,
+              child: Column(
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 8.h, horizontal: 24.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          Constants.createClass,
+                          style: classTextStyle,
+                        ),
+                        InkWell(
+                            onTap: () => Navigator.pop(context),
+                            child: Icon(Icons.close)),
+                      ],
+                    ),
                   ),
-                ),
-                Divider(color: blueDarkLight2, height: 1),
-                SizedBox(height: 8.h),
-                _createClassesTextField(),
-                SizedBox(height: 8.h),
-                _submitButton(),
-              ],
+                  Divider(color: blueDarkLight2, height: 1),
+                  SizedBox(height: 8.h),
+                  _createClassesTextField(),
+                  SizedBox(height: 8.h),
+                  _submitButton(),
+                ],
+              ),
             ),
           ),
         );
@@ -349,7 +353,7 @@ class _HomePageState extends State<HomePage> {
                   child: _classesName(),
                 ),
                 Text(
-                  'Class 1',
+                  Constants.classList,
                   style: ThemeEmailBoldTextStyle,
                 ),
               ],

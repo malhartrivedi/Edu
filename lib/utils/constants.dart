@@ -56,6 +56,7 @@ class Constants {
   static String enterState = 'Please Enter State';
   static String enterPost = 'Please Enter Post Code';
   static String enterInstitute = 'Please Enter Institute Id';
+  static String createClass = 'Create Class';
   static String enterPassword = 'Please enter Password';
   static String validPassword = 'Password must be at least 6 characters in length';
   static String validConfirmPassword = 'Confirmation password not match the password';

@@ -1,3 +1,4 @@
+import 'package:admin/model/user_data_model.dart';
 import 'package:admin/service/user_auth.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_icon.dart';
@@ -6,12 +7,14 @@ import 'package:admin/views/change_password_page.dart';
 import 'package:admin/views/edit_profile_page.dart';
 import 'package:admin/utils/global.dart';
 import 'package:admin/widgets/my_textstyle.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  ProfilePage({Key? key, required this.uid}) : super(key: key);
+  final uid;
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -20,125 +23,158 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    var Firstname = Constants.NameInitial;
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 50.h),
-            SizedBox(
-              height: 120.w,
-              width: 120.w,
-              child: Card(
-                color: greyWhite,
-                child: Center(
-                  child: Text(
-                    '${Firstname[0].toUpperCase()}',
-                    style: ThemeBoldTextStyle,
-                  ),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(70.w),
-                ),
-                elevation: 6,
-              ),
-            ),
-            SizedBox(height: 20.h),
-            Text(Constants.NameInitial, style: ThemeNameBoldTextStyle),
-            Text(Constants.NameEmail, style: ThemeEmailBoldTextStyle),
-            SizedBox(height: 32.h),
-            _getDivider(),
-            _getDetailItem(Constants.phoneB, '+91-9377726819'),
-            _getDivider(),
-            _getDetailItem(Constants.schoolB, 'CN High School'),
-            _getDivider(),
-            _getDetailItem(
-                Constants.addressB, '14, Sai-Niketan Society-1 Vastral Road'),
-            _getDivider(),
-            _getDetailItem(Constants.cityB, 'Ahmedabad'),
-            _getDivider(),
-            _getDetailItem(Constants.stateB, 'Gujarat'),
-            _getDivider(),
-            _getDetailItem(Constants.postB, '380058'),
-            _getDivider(),
-            SizedBox(height: 10.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditProfile(),
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        elevation: 6.0,
-                        primary: greyGreenDarkLight,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: Text(
-                        Constants.editProfile,
-                        style: sizeWhiteTextStyle,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChangePassword(),
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        elevation: 6.0,
-                        primary: greyGreenDarkLight,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: Text(
-                        Constants.changePassword,
-                        style: sizeWhiteTextStyle,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 8.h),
-            SizedBox(
-              width: double.infinity,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: ElevatedButton(
-                  onPressed: () => _showDialog(),
-                  style: ElevatedButton.styleFrom(
-                    elevation: 6.0,
-                    primary: greyWhite,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    Constants.logoutB,
-                    style: logTextStyle,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-          ],
-        ),
-      ),
+      child: _getBody(),
     );
+  }
+
+  _getBody() {
+    return StreamBuilder<QuerySnapshot<UserDataModel>>(
+      stream: _getData(widget.uid),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return LinearProgressIndicator();
+        final data = snapshot.requireData;
+        UserDataModel userModel = data.docs.first.data();
+        var Firstname = '${userModel.name}';
+        return SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 50.h),
+              SizedBox(
+                height: 120.w,
+                width: 120.w,
+                child: Card(
+                  color: greyWhite,
+                  child: Center(
+                    child: Text(
+                      '${Firstname[0].toUpperCase()}',
+                      style: ThemeBoldTextStyle,
+                    ),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(70.w),
+                  ),
+                  elevation: 6,
+                ),
+              ),
+              SizedBox(height: 20.h),
+              Text('${userModel.name}',
+                  style: ThemeNameBoldTextStyle),
+              Text('${userModel.email}',
+                  style: ThemeEmailBoldTextStyle),
+              SizedBox(height: 32.h),
+              _getDivider(),
+              _getDetailItem(
+                  Constants.phoneB, '+91-${userModel.phone}'),
+              _getDivider(),
+              _getDetailItem(
+                  Constants.schoolB, '${userModel.school}'),
+              _getDivider(),
+              _getDetailItem(
+                  Constants.addressB, '${userModel.address}'),
+              _getDivider(),
+              _getDetailItem(
+                  Constants.cityB, '${userModel.city}'),
+              _getDivider(),
+              _getDetailItem(
+                  Constants.stateB, '${userModel.state}'),
+              _getDivider(),
+              _getDetailItem(
+                  Constants.postB, '${userModel.post}'),
+              _getDivider(),
+              SizedBox(height: 10.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditProfile(),
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          elevation: 6.0,
+                          primary: greyGreenDarkLight,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          Constants.editProfile,
+                          style: sizeWhiteTextStyle,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChangePassword(),
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          elevation: 6.0,
+                          primary: greyGreenDarkLight,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          Constants.changePassword,
+                          style: sizeWhiteTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 8.h),
+              SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: ElevatedButton(
+                    onPressed: () => _showDialog(),
+                    style: ElevatedButton.styleFrom(
+                      elevation: 6.0,
+                      primary: greyWhite,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      Constants.logoutB,
+                      style: logTextStyle,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Stream<QuerySnapshot<UserDataModel>>? _getData(String uid) {
+    Stream<QuerySnapshot<UserDataModel>>? stream = FirebaseFirestore.instance
+        .collection('users')
+        .doc('users')
+        .collection('admin')
+        .where('uid', isEqualTo: uid)
+        .withConverter<UserDataModel>(
+        fromFirestore: (snapshots, _) =>
+            UserDataModel.fromJson(snapshots.data()!),
+        toFirestore: (UserDataModel, _) => UserDataModel.toJson())
+        .snapshots();
+    return stream;
   }
 
   _getDivider() {
