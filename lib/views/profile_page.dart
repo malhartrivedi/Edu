@@ -1,5 +1,7 @@
+import 'package:admin/service/user_auth.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/constants.dart';
+import 'package:admin/utils/global.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -92,7 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: ElevatedButton(
-                  onPressed: (){},
+                  onPressed: _logout,
                   style: ButtonStyle(backgroundColor: MaterialStateProperty.all(greyWhite)),
                   child: Text(
                     Constants.logoutB,
@@ -127,5 +130,13 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
+  }
+
+  _logout() {
+    try {
+      UserAuth().logout();
+    } catch (e) {
+      Global.showSnackBar(context, e.toString());
+    }
   }
 }

@@ -32,7 +32,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final confirmPasswordController = TextEditingController();
 
   bool nameFocus = false;
-  bool  emailFocus = false;
+  bool emailFocus = false;
   bool schoolFocus = false;
   bool phoneFocus = false;
   bool addressFocus = false;
@@ -273,7 +273,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             if (school!.isEmpty) {
               _isSchoolValid = false;
               return Constants.enterSchool;
-            } else if(school.isNotEmpty){
+            } else if (school.isNotEmpty) {
               _isSchoolValid = true;
             }
             return null;
@@ -358,7 +358,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             if (address!.isEmpty) {
               _isAddressValid = false;
               return Constants.enterAddress;
-            } else if(address.isNotEmpty){
+            } else if (address.isNotEmpty) {
               _isAddressValid = true;
             }
             return null;
@@ -385,7 +385,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           decoration: InputDecoration(
             suffixIcon: Icon(
               Icons.check,
-              color:  _isCityValid == true ? blueDark : grey,
+              color: _isCityValid == true ? blueDark : grey,
             ),
             contentPadding:
                 EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
@@ -400,7 +400,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             if (city!.isEmpty) {
               _isCityValid = false;
               return Constants.enterCity;
-            }else if(city.isNotEmpty){
+            } else if (city.isNotEmpty) {
               _isCityValid = true;
             }
             return null;
@@ -420,14 +420,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
       hasFocus: stateFocus == true,
       child: Focus(
         child: TextFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: stateController,
             keyboardType: TextInputType.text,
             style: h2TextStyle,
             decoration: InputDecoration(
               suffixIcon: Icon(
                 Icons.check,
-                color:  _isStateValid == true ? blueDark : grey,
+                color: _isStateValid == true ? blueDark : grey,
               ),
               contentPadding:
                   EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
@@ -442,7 +442,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               if (state!.isEmpty) {
                 _isStateValid = false;
                 return Constants.enterState;
-              } else if(state.isNotEmpty){
+              } else if (state.isNotEmpty) {
                 _isStateValid = true;
               }
               return null;
@@ -461,14 +461,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
       hasFocus: postFocus == true,
       child: Focus(
         child: TextFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: postController,
             keyboardType: TextInputType.number,
             style: h2TextStyle,
             decoration: InputDecoration(
               suffixIcon: Icon(
                 Icons.check,
-                color:  _isPostValid == true ? blueDark : grey,
+                color: _isPostValid == true ? blueDark : grey,
               ),
               contentPadding:
                   EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
@@ -483,7 +483,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               if (post!.isEmpty) {
                 _isPostValid = false;
                 return Constants.enterPost;
-              } else if(post.isNotEmpty){
+              } else if (post.isNotEmpty) {
                 _isPostValid = true;
               }
               return null;
@@ -654,6 +654,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         city: city,
         state: state,
         post: int.parse(post),
+        instituteId: Global.getUniqueCode(),
       );
 
       FirebaseFirestore.instance

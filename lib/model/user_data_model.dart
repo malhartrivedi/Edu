@@ -9,6 +9,7 @@ class UserDataModel {
     required this.city,
     required this.state,
     required this.post,
+    required this.instituteId,
   });
 
   UserDataModel.fromJson(Map<String, Object?> json)
@@ -22,6 +23,7 @@ class UserDataModel {
           city: json['city']! as String,
           state: json['state']! as String,
           post: json['post']! as int,
+          instituteId: json['institute_id']! as String,
         );
 
   final String uid;
@@ -33,6 +35,7 @@ class UserDataModel {
   final String city;
   final String state;
   final int post;
+  final String instituteId;
 
   Map<String, Object?> toJson() {
     return {
@@ -45,6 +48,7 @@ class UserDataModel {
       'city': city,
       'state': state,
       'post': post,
+      'institute_id': instituteId,
     };
   }
 }

@@ -46,11 +46,11 @@ class MyApp extends StatelessWidget {
             if (!snapshot.hasData) {
               return const SplashPage();
             }
-            return StreamBuilder(
+            return StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return const DashBoardPage();
+                  return DashBoardPage(uid: snapshot.data!.uid);
                 }
                 return const LoginPage();
               },

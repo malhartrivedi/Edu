@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:admin/utils/app_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +17,23 @@ class Global {
         backgroundColor: backgroundColor ?? red,
         content: Text(
           message,
-          style: TextStyle(color: white, fontSize: 14.sp,),
+          style: TextStyle(
+            color: white,
+            fontSize: 14.sp,
+          ),
           textAlign: TextAlign.center,
         ),
       ),
     );
+  }
+
+  static String getUniqueCode() {
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+
+    String randomString = String.fromCharCodes(Iterable.generate(
+        7, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+    return randomString;
   }
 }
