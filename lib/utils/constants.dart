@@ -74,4 +74,5 @@ class Constants {
   static String userNotExist = 'User not exist';
   static String timeoutMessage = 'Timeout, Try again later.';
   static String emailAlreadyRegistered = 'Email already registered';
+  static String teacherRegisteredSuccessfully = 'Teacher registered successfully';
 }

@@ -1,11 +1,18 @@
+import 'package:admin/model/teacher_data_model.dart';
+import 'package:admin/model/user_data_model.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/constants.dart';
+import 'package:admin/utils/global.dart';
 import 'package:admin/widgets/my_textstyle.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TeacherRegistrationPage extends StatefulWidget {
-  const TeacherRegistrationPage({Key? key}) : super(key: key);
+  const TeacherRegistrationPage({Key? key, required this.adminData})
+      : super(key: key);
+
+  final UserDataModel adminData;
 
   @override
   _TeacherRegistrationPageState createState() =>
@@ -38,9 +45,9 @@ class _TeacherRegistrationPageState extends State<TeacherRegistrationPage> {
 
   String get state => _stateController.value.text;
 
-  String get post => _postController.value.text;
+  String get postCode => _postController.value.text;
 
-  String get institute => _instituteController.value.text;
+  String get instituteId => _instituteController.value.text;
 
   bool _nameFocus = false;
   bool _emailFocus = false;
@@ -61,6 +68,14 @@ class _TeacherRegistrationPageState extends State<TeacherRegistrationPage> {
   bool _isStateValid = false;
   bool _isPostValid = false;
   bool _isInstituteValid = false;
+
+  @override
+  void initState() {
+    UserDataModel model = widget.adminData;
+    _instituteController.text = model.instituteId;
+    _schoolController.text = model.school;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -236,6 +251,7 @@ class _TeacherRegistrationPageState extends State<TeacherRegistrationPage> {
         if (!_formKey.currentState!.validate()) {
           return;
         }
+        _registerTeacherData();
       },
       style: ElevatedButton.styleFrom(
         primary: greyGreenDarkLight,
@@ -246,6 +262,32 @@ class _TeacherRegistrationPageState extends State<TeacherRegistrationPage> {
       ),
       child: Text(Constants.submit),
     );
+  }
+
+  _registerTeacherData() async {
+    DateTime now = DateTime.now();
+    TeacherDataModel model = TeacherDataModel(
+      uid: '',
+      instituteId: instituteId,
+      instituteName: school,
+      name: name,
+      email: email,
+      phone: int.parse(phone),
+      address: address,
+      city: city,
+      state: state,
+      postcode: int.parse(postCode),
+      createdAt: now,
+      updatedAt: now,
+    );
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc('users')
+        .collection('teacher')
+        .add(model.toJson());
+    Navigator.pop(context);
+    Global.showSnackBar(context, Constants.teacherRegisteredSuccessfully,
+        backgroundColor: greenLight);
   }
 
   _getContainerOutLine({required Widget child, required bool hasFocus}) {

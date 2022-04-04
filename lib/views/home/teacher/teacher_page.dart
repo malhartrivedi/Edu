@@ -1,3 +1,4 @@
+import 'package:admin/model/user_data_model.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/constants.dart';
 import 'package:admin/views/home/teacher/teacher_registration_page.dart';
@@ -6,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TeacherPage extends StatefulWidget {
-  const TeacherPage({Key? key}) : super(key: key);
+  const TeacherPage({Key? key, required this.adminData}) : super(key: key);
+
+  final UserDataModel adminData;
 
   @override
   _TeacherPageState createState() => _TeacherPageState();
@@ -36,7 +39,9 @@ class _TeacherPageState extends State<TeacherPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TeacherRegistrationPage(),
+                builder: (context) => TeacherRegistrationPage(
+                  adminData: widget.adminData,
+                ),
               ),
             );
           },

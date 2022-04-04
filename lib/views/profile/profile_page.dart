@@ -3,9 +3,9 @@ import 'package:admin/service/user_auth.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_icon.dart';
 import 'package:admin/utils/constants.dart';
+import 'package:admin/utils/global.dart';
 import 'package:admin/views/profile/change_password_page.dart';
 import 'package:admin/views/profile/edit_profile_page.dart';
-import 'package:admin/utils/global.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,10 +23,10 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: bgColor,
-        body: _getBody(),
+    return Scaffold(
+      backgroundColor: bgColor,
+      body: SafeArea(
+        child: _getBody(),
       ),
     );
   }
@@ -61,29 +61,21 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(height: 20.h),
-              Text('${model.name}',
-                  style: ThemeNameBoldTextStyle),
-              Text('${model.email}',
-                  style: ThemeEmailBoldTextStyle),
+              Text('${model.name}', style: ThemeNameBoldTextStyle),
+              Text('${model.email}', style: ThemeEmailBoldTextStyle),
               SizedBox(height: 32.h),
               _getDivider(),
-              _getDetailItem(
-                  Constants.phoneB, '+91-${model.phone}'),
+              _getDetailItem(Constants.phoneB, '+91-${model.phone}'),
               _getDivider(),
-              _getDetailItem(
-                  Constants.schoolB, '${model.school}'),
+              _getDetailItem(Constants.schoolB, '${model.school}'),
               _getDivider(),
-              _getDetailItem(
-                  Constants.addressB, '${model.address}'),
+              _getDetailItem(Constants.addressB, '${model.address}'),
               _getDivider(),
-              _getDetailItem(
-                  Constants.cityB, '${model.city}'),
+              _getDetailItem(Constants.cityB, '${model.city}'),
               _getDivider(),
-              _getDetailItem(
-                  Constants.stateB, '${model.state}'),
+              _getDetailItem(Constants.stateB, '${model.state}'),
               _getDivider(),
-              _getDetailItem(
-                  Constants.postB, '${model.post}'),
+              _getDetailItem(Constants.postB, '${model.post}'),
               _getDivider(),
               SizedBox(height: 10.h),
               Padding(
@@ -174,9 +166,9 @@ class _ProfilePageState extends State<ProfilePage> {
         .collection('admin')
         .where('uid', isEqualTo: uid)
         .withConverter<UserDataModel>(
-        fromFirestore: (snapshots, _) =>
-            UserDataModel.fromJson(snapshots.data()!),
-        toFirestore: (UserDataModel, _) => UserDataModel.toJson())
+            fromFirestore: (snapshots, _) =>
+                UserDataModel.fromJson(snapshots.data()!),
+            toFirestore: (UserDataModel, _) => UserDataModel.toJson())
         .snapshots();
     return stream;
   }

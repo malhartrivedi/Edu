@@ -1,3 +1,4 @@
+import 'package:admin/model/user_data_model.dart';
 import 'package:admin/utils/app_asset_path.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_icon.dart';
@@ -5,12 +6,15 @@ import 'package:admin/utils/constants.dart';
 import 'package:admin/views/home/parent_page.dart';
 import 'package:admin/views/home/teacher/teacher_page.dart';
 import 'package:admin/widgets/my_textstyle.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required String uid}) : super(key: key);
+  const HomePage({Key? key, required this.uid}) : super(key: key);
+
+  final String uid;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -24,6 +28,31 @@ class _HomePageState extends State<HomePage> {
   bool ClassFocus = false;
   bool _isClassValid = false;
   bool _isEditEnabled = false;
+  UserDataModel? _userDataModel;
+
+  Future<void> _getUserData() async {
+    QuerySnapshot<UserDataModel> data = await FirebaseFirestore.instance
+        .collection('users')
+        .doc('users')
+        .collection('admin')
+        .where('uid', isEqualTo: widget.uid)
+        .withConverter<UserDataModel>(
+          fromFirestore: (snapshots, _) =>
+              UserDataModel.fromJson(snapshots.data()!),
+          toFirestore: (UserDataModel, _) => UserDataModel.toJson(),
+        )
+        .get();
+
+    setState(() {
+      _userDataModel = data.docs.first.data();
+    });
+  }
+
+  @override
+  void initState() {
+    _getUserData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +61,10 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         backgroundColor: bgColor,
         appBar: _getAppBar(),
-        body: _getBody(),
+        body: AbsorbPointer(
+          absorbing: _userDataModel == null,
+          child: _getBody(),
+        ),
       ),
     );
   }
@@ -60,7 +92,8 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           SizedBox(width: 12.w),
-          Text(Constants.cnHighSchool, style: schoolTextStyle),
+          if (_userDataModel != null)
+            Text(_userDataModel!.school, style: schoolTextStyle),
         ],
       ),
     );
@@ -74,25 +107,41 @@ class _HomePageState extends State<HomePage> {
           Row(
             children: [
               _getTeacherParentItem(
-                  label: Constants.teacher,
-                  assetPath: AssetPath.iconTeacher,
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => TeacherPage()));
-                  }),
+                label: Constants.teacher,
+                assetPath: AssetPath.iconTeacher,
+                onTap: _goToTeacherPage,
+              ),
               SizedBox(width: 10.w),
               _getTeacherParentItem(
-                  label: Constants.parent,
-                  assetPath: AssetPath.iconFamily,
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ParentPage()));
-                  }),
+                label: Constants.parent,
+                assetPath: AssetPath.iconFamily,
+                onTap: _goToParentPage,
+              ),
             ],
           ),
           SizedBox(height: 12.h),
           _getClasses(),
         ],
+      ),
+    );
+  }
+
+  _goToTeacherPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TeacherPage(
+          adminData: _userDataModel!,
+        ),
+      ),
+    );
+  }
+
+  _goToParentPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ParentPage(),
       ),
     );
   }
@@ -368,9 +417,7 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {}),
               if (_isEditEnabled)
                 _getActionIcon(
-                    bgColor: red,
-                    iconData: Icons.delete_outline,
-                    onTap: () {}),
+                    bgColor: red, iconData: Icons.delete_outline, onTap: () {}),
             ],
           ),
         );
