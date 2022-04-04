@@ -97,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => EditProfile(userModel: userModel),
+                            builder: (context) => EditProfile(userModel: model),
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
