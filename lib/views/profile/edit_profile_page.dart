@@ -1,3 +1,4 @@
+import 'package:admin/model/user_data_model.dart';
 import 'package:admin/service/user_auth.dart';
 import 'package:admin/utils/app_asset_path.dart';
 import 'package:admin/utils/app_color.dart';
@@ -10,14 +11,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditProfile extends StatefulWidget {
-  EditProfile({Key? key, this.doc}) : super(key: key);
-  QueryDocumentSnapshot<Object?>? doc;
+  EditProfile({Key? key, required this.userModel}) : super(key: key);
+  UserDataModel userModel;
 
   @override
   _EditProfileState createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
+  @override
+  void initState() {
+    nameController.text = widget.userModel.name;
+    emailController.text = widget.userModel.email;
+    schoolController.text = widget.userModel.school;
+    phoneController.text = widget.userModel.phone.toString();
+    addressController.text = widget.userModel.address;
+    cityController.text = widget.userModel.city;
+    stateController.text = widget.userModel.state;
+    postController.text = widget.userModel.post.toString();
+  }
 
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
@@ -30,16 +42,23 @@ class _EditProfileState extends State<EditProfile> {
   final postController = TextEditingController();
 
   String get name => nameController.value.text;
+
   String get email => emailController.value.text;
+
   String get school => schoolController.value.text;
+
   String get phone => phoneController.value.text;
+
   String get address => addressController.value.text;
+
   String get city => cityController.value.text;
+
   String get state => stateController.value.text;
+
   String get post => postController.value.text;
 
   bool nameFocus = false;
-  bool  emailFocus = false;
+  bool emailFocus = false;
   bool schoolFocus = false;
   bool phoneFocus = false;
   bool addressFocus = false;
@@ -56,15 +75,13 @@ class _EditProfileState extends State<EditProfile> {
   bool _isStateValid = false;
   bool _isPostValid = false;
 
-
-
   @override
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Edit Profile',style: ExtraBoldTextStyle),
+          title: Text('Edit Profile', style: ExtraBoldTextStyle),
           backgroundColor: blueDarkLight2,
         ),
         body: SafeArea(
@@ -117,7 +134,7 @@ class _EditProfileState extends State<EditProfile> {
               color: _isNameValid == true ? blueDark : grey,
             ),
             contentPadding:
-            EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
+                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             labelText: Constants.name,
@@ -160,7 +177,7 @@ class _EditProfileState extends State<EditProfile> {
               color: _isEmailValid == true ? blueDark : grey,
             ),
             contentPadding:
-            EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
+                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             labelText: Constants.email,
@@ -203,7 +220,7 @@ class _EditProfileState extends State<EditProfile> {
               color: _isSchoolValid == true ? blueDark : grey,
             ),
             contentPadding:
-            EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
+                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             labelText: Constants.schoolName,
@@ -215,7 +232,7 @@ class _EditProfileState extends State<EditProfile> {
             if (school!.isEmpty) {
               _isSchoolValid = false;
               return Constants.enterSchool;
-            } else if(school.isNotEmpty){
+            } else if (school.isNotEmpty) {
               _isSchoolValid = true;
             }
             return null;
@@ -245,7 +262,7 @@ class _EditProfileState extends State<EditProfile> {
               color: _isPhoneValid == true ? blueDark : grey,
             ),
             contentPadding:
-            EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
+                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             labelText: Constants.phone,
@@ -288,7 +305,7 @@ class _EditProfileState extends State<EditProfile> {
               color: _isAddressValid == true ? blueDark : grey,
             ),
             contentPadding:
-            EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
+                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             labelText: Constants.address,
@@ -300,7 +317,7 @@ class _EditProfileState extends State<EditProfile> {
             if (address!.isEmpty) {
               _isAddressValid = false;
               return Constants.enterAddress;
-            } else if(address.isNotEmpty){
+            } else if (address.isNotEmpty) {
               _isAddressValid = true;
             }
             return null;
@@ -327,10 +344,10 @@ class _EditProfileState extends State<EditProfile> {
           decoration: InputDecoration(
             suffixIcon: Icon(
               Icons.check,
-              color:  _isCityValid == true ? blueDark : grey,
+              color: _isCityValid == true ? blueDark : grey,
             ),
             contentPadding:
-            EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
+                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
             focusedBorder: InputBorder.none,
             enabledBorder: InputBorder.none,
             labelText: Constants.city,
@@ -342,7 +359,7 @@ class _EditProfileState extends State<EditProfile> {
             if (city!.isEmpty) {
               _isCityValid = false;
               return Constants.enterCity;
-            }else if(city.isNotEmpty){
+            } else if (city.isNotEmpty) {
               _isCityValid = true;
             }
             return null;
@@ -369,10 +386,10 @@ class _EditProfileState extends State<EditProfile> {
             decoration: InputDecoration(
               suffixIcon: Icon(
                 Icons.check,
-                color:  _isStateValid == true ? blueDark : grey,
+                color: _isStateValid == true ? blueDark : grey,
               ),
               contentPadding:
-              EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
+                  EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
               focusedBorder: InputBorder.none,
               enabledBorder: InputBorder.none,
               labelText: Constants.state,
@@ -384,7 +401,7 @@ class _EditProfileState extends State<EditProfile> {
               if (state!.isEmpty) {
                 _isStateValid = false;
                 return Constants.enterState;
-              } else if(state.isNotEmpty){
+              } else if (state.isNotEmpty) {
                 _isStateValid = true;
               }
               return null;
@@ -410,10 +427,10 @@ class _EditProfileState extends State<EditProfile> {
             decoration: InputDecoration(
               suffixIcon: Icon(
                 Icons.check,
-                color:  _isPostValid == true ? blueDark : grey,
+                color: _isPostValid == true ? blueDark : grey,
               ),
               contentPadding:
-              EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
+                  EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
               focusedBorder: InputBorder.none,
               enabledBorder: InputBorder.none,
               labelText: Constants.post,
@@ -425,7 +442,7 @@ class _EditProfileState extends State<EditProfile> {
               if (post!.isEmpty) {
                 _isPostValid = false;
                 return Constants.enterPost;
-              } else if(post.isNotEmpty){
+              } else if (post.isNotEmpty) {
                 _isPostValid = true;
               }
               return null;

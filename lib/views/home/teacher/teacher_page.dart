@@ -3,6 +3,7 @@ import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/constants.dart';
 import 'package:admin/views/home/teacher/teacher_registration_page.dart';
 import 'package:admin/widgets/my_textstyle.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -65,8 +66,58 @@ class _TeacherPageState extends State<TeacherPage> {
   }
 
   _getBody() {
-    return Center(
-      child: Text('No Data Found'),
+    return ListView.builder(
+        itemCount: 3,
+        padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
+        itemBuilder: (context, index){
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
+            padding: EdgeInsets.all(6.w),
+            decoration: BoxDecoration(
+                border: Border.all(color: blueDarkLight3),
+                borderRadius: BorderRadius.circular(14.w)),
+            child: Row(
+              children: [
+                _nameIcon(),
+                SizedBox(width: 6.w),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                     'Raju',
+                      style: NameBoldTextStyle,
+                    ),
+                    Text(
+                      'Raju@gmail.com',
+                      style: emailBoldTextStyle,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+    );
+  }
+
+  _nameIcon() {
+    var Firstname = Constants.teacherInitial;
+    return SizedBox(
+      height: 56.w,
+      width: 56.w,
+      child: Card(
+        color: blueDarkLight2,
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.w),
+        ),
+        child: Center(
+          child: Text(
+            '${Firstname[0].toUpperCase()}',
+            style: iconClassTextStyle,
+          ),
+        ),
+      ),
     );
   }
 }

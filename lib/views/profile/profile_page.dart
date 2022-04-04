@@ -16,6 +16,8 @@ class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key, required this.uid}) : super(key: key);
   final uid;
 
+
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -87,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => EditProfile(),
+                            builder: (context) => EditProfile(userModel: model),
                           ),
                         ),
                         style: ElevatedButton.styleFrom(

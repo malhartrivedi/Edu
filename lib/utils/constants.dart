@@ -10,11 +10,13 @@ class Constants {
   static String logoutB = 'LOGOUT';
   static String edit = 'Edit';
   static String NameInitial = 'Malhar';
+  static String teacherInitial = 'Raju';
   static String teacher = 'Teacher';
   static String teacherRegistration = 'Teacher Registration';
   static String classes = 'Classes';
   static String classList = 'Class 1';
   static String parent = 'Parent';
+  static String parentRegistration = 'Parent Registration';
   static String NameEmail = 'malhar@gmail.com';
   static String editProfile = 'EDIT PROFILE';
   static String changePassword = 'CHANGE PASSWORD';

@@ -131,4 +131,12 @@ final classTextStyle = TextStyle(
     fontSize: 22.sp
 );
 
+final NameBoldTextStyle = TextStyle(
+  color:blueDark,
+  fontWeight: fwBold
+);
+
+final emailBoldTextStyle = TextStyle(
+    color:blueDarkLight,
+);
 
