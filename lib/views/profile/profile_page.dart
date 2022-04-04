@@ -3,8 +3,8 @@ import 'package:admin/service/user_auth.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_icon.dart';
 import 'package:admin/utils/constants.dart';
-import 'package:admin/views/change_password_page.dart';
-import 'package:admin/views/edit_profile_page.dart';
+import 'package:admin/views/profile/change_password_page.dart';
+import 'package:admin/views/profile/edit_profile_page.dart';
 import 'package:admin/utils/global.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,7 +24,10 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: _getBody(),
+      child: Scaffold(
+        backgroundColor: bgColor,
+        body: _getBody(),
+      ),
     );
   }
 
@@ -34,8 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
         final data = snapshot.requireData;
-        UserDataModel userModel = data.docs.first.data();
-        var Firstname = '${userModel.name}';
+        UserDataModel model = data.docs.first.data();
         return SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -48,7 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: greyWhite,
                   child: Center(
                     child: Text(
-                      '${Firstname[0].toUpperCase()}',
+                      '${model.name[0].toUpperCase()}',
                       style: ThemeBoldTextStyle,
                     ),
                   ),
@@ -59,29 +61,29 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(height: 20.h),
-              Text('${userModel.name}',
+              Text('${model.name}',
                   style: ThemeNameBoldTextStyle),
-              Text('${userModel.email}',
+              Text('${model.email}',
                   style: ThemeEmailBoldTextStyle),
               SizedBox(height: 32.h),
               _getDivider(),
               _getDetailItem(
-                  Constants.phoneB, '+91-${userModel.phone}'),
+                  Constants.phoneB, '+91-${model.phone}'),
               _getDivider(),
               _getDetailItem(
-                  Constants.schoolB, '${userModel.school}'),
+                  Constants.schoolB, '${model.school}'),
               _getDivider(),
               _getDetailItem(
-                  Constants.addressB, '${userModel.address}'),
+                  Constants.addressB, '${model.address}'),
               _getDivider(),
               _getDetailItem(
-                  Constants.cityB, '${userModel.city}'),
+                  Constants.cityB, '${model.city}'),
               _getDivider(),
               _getDetailItem(
-                  Constants.stateB, '${userModel.state}'),
+                  Constants.stateB, '${model.state}'),
               _getDivider(),
               _getDetailItem(
-                  Constants.postB, '${userModel.post}'),
+                  Constants.postB, '${model.post}'),
               _getDivider(),
               SizedBox(height: 10.h),
               Padding(
@@ -105,11 +107,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         child: Text(
                           Constants.editProfile,
+                          textAlign: TextAlign.center,
                           style: sizeWhiteTextStyle,
                         ),
                       ),
                     ),
-                    SizedBox(width: 20),
+                    SizedBox(width: 20.w),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () => Navigator.push(
@@ -127,6 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         child: Text(
                           Constants.changePassword,
+                          textAlign: TextAlign.center,
                           style: sizeWhiteTextStyle,
                         ),
                       ),

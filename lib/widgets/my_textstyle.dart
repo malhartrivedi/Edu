@@ -99,7 +99,7 @@ final sizeTextStyle = TextStyle(
 final schoolTextStyle = TextStyle(
   color:blueDark,
   fontWeight: fwExtraBold,
-  fontSize: 24.sp
+  fontSize: 20.sp
 );
 
 final teacherTextStyle = TextStyle(
@@ -114,10 +114,10 @@ final parentTextStyle = TextStyle(
     fontSize: 18.sp
 );
 
-final classesTextStyle = TextStyle(
+final blueDark20BoldTS = TextStyle(
   color:blueDark,
-  fontWeight: fwExtraBold,
-  fontSize: 22.sp,
+  fontWeight: fwBold,
+  fontSize: 20.sp,
 );
 
 final iconClassTextStyle = TextStyle(
