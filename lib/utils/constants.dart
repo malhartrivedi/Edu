@@ -11,6 +11,7 @@ class Constants {
   static String edit = 'Edit';
   static String NameInitial = 'Malhar';
   static String teacher = 'Teacher';
+  static String teacherRegistration = 'Teacher Registration';
   static String classes = 'Classes';
   static String classList = 'Class 1';
   static String parent = 'Parent';
@@ -36,6 +37,7 @@ class Constants {
   static String schoolB = 'SCHOOL';
   static String address = 'Address';
   static String addressB = 'ADDRESS';
+  static String add = 'Add';
   static String city = 'City';
   static String cityB = 'CITY';
   static String state = 'State';

@@ -1,8 +1,8 @@
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_icon.dart';
 import 'package:admin/utils/constants.dart';
-import 'package:admin/views/home_page.dart';
-import 'package:admin/views/profile_page.dart';
+import 'package:admin/views/home/home_page.dart';
+import 'package:admin/views/profile/profile_page.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
