@@ -1,10 +1,10 @@
 import 'package:admin/model/teacher_data_model.dart';
 import 'package:admin/model/user_data_model.dart';
+import 'package:admin/service/firestore_methods.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/constants.dart';
 import 'package:admin/utils/global.dart';
 import 'package:admin/widgets/my_textstyle.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -281,11 +281,7 @@ class _TeacherRegistrationPageState extends State<TeacherRegistrationPage> {
       createdAt: now,
       updatedAt: now,
     );
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc('users')
-        .collection('teacher')
-        .add(model.toJson());
+    await FirestoreMethods().addData(UserType.Teacher, model.toJson());
     Navigator.pop(context);
     Global.showSnackBar(context, Constants.teacherRegisteredSuccessfully,
         backgroundColor: greenLight);

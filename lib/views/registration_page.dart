@@ -1,11 +1,11 @@
 import 'package:admin/model/user_data_model.dart';
+import 'package:admin/service/firestore_methods.dart';
 import 'package:admin/service/user_auth.dart';
 import 'package:admin/utils/app_asset_path.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/constants.dart';
 import 'package:admin/utils/global.dart';
 import 'package:admin/widgets/my_textstyle.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -644,7 +644,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         password: password,
       );
       Navigator.of(context).pop();
-      UserDataModel userDataModel = UserDataModel(
+      UserDataModel model = UserDataModel(
         uid: userCred.user!.uid,
         name: name,
         email: email,
@@ -657,11 +657,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         instituteId: Global.getUniqueCode(),
       );
 
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc('users')
-          .collection('admin')
-          .add(userDataModel.toJson());
+      await FirestoreMethods().addData(UserType.Admin, model.toJson());
     } catch (e) {
       Global.showSnackBar(context, e.toString());
     }

@@ -16,6 +16,7 @@ class Constants {
   static String classes = 'Classes';
   static String classList = 'Class 1';
   static String parent = 'Parent';
+  static String loading = 'Loading';
   static String parentRegistration = 'Parent Registration';
   static String NameEmail = 'malhar@gmail.com';
   static String editProfile = 'EDIT PROFILE';

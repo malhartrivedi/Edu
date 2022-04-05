@@ -1,4 +1,5 @@
 import 'package:admin/model/user_data_model.dart';
+import 'package:admin/service/firestore_methods.dart';
 import 'package:admin/service/user_auth.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_icon.dart';
@@ -15,8 +16,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key, required this.uid}) : super(key: key);
   final uid;
-
-
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -35,7 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   _getBody() {
     return StreamBuilder<QuerySnapshot<UserDataModel>>(
-      stream: _getData(widget.uid),
+      stream: FirestoreMethods().getAdminByUID(widget.uid).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
         final data = snapshot.requireData;
@@ -206,7 +205,7 @@ class _ProfilePageState extends State<ProfilePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(Constants.logout, style: logoutTextStyle),
-            Icon(icLogout, color: redLight, size: 22.sp),
+            Icon(icLogout, color: red, size: 22.sp),
           ],
         ),
         content: Text(Constants.logoutSure, style: sizeTextStyle),
