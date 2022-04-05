@@ -38,6 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
         final data = snapshot.requireData;
+        DocumentReference reference = data.docs.first.reference;
         UserDataModel model = data.docs.first.data();
         return SingleChildScrollView(
           child: Column(
@@ -88,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => EditProfile(userModel: model),
+                            builder: (context) => EditProfile(userModel: model,reference: reference),
                           ),
                         ),
                         style: ElevatedButton.styleFrom(

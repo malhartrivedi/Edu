@@ -11,8 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditProfile extends StatefulWidget {
-  EditProfile({Key? key, required this.userModel}) : super(key: key);
+  EditProfile({Key? key, required this.userModel, required this.reference}) : super(key: key);
   UserDataModel userModel;
+  DocumentReference reference;
 
   @override
   _EditProfileState createState() => _EditProfileState();
@@ -462,6 +463,7 @@ class _EditProfileState extends State<EditProfile> {
         if (!formKey.currentState!.validate()) {
           return;
         }
+        _getEditProfile();
       },
       style: ElevatedButton.styleFrom(
         primary: greyGreenDarkLight,
@@ -484,5 +486,22 @@ class _EditProfileState extends State<EditProfile> {
       ),
       child: child,
     );
+  }
+
+  _getEditProfile() async {
+    UserDataModel userDataModel = UserDataModel(
+      uid: widget.userModel.uid,
+      name: name,
+      email: email,
+      phone: int.parse(phone),
+      address: address,
+      city: city,
+      state: state,
+      instituteId: widget.userModel.instituteId,
+      post: int.parse(post),
+      school: school,
+    );
+    await widget.reference.update(userDataModel.toJson());
+    Navigator.pop(context);
   }
 }

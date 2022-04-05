@@ -1,28 +1,29 @@
+import 'package:admin/model/parent_data_model.dart';
 import 'package:admin/model/teacher_data_model.dart';
 import 'package:admin/model/user_data_model.dart';
 import 'package:admin/service/firestore_methods.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_fonts.dart';
 import 'package:admin/utils/constants.dart';
+import 'package:admin/views/home/parent/parent_registration_page.dart';
 import 'package:admin/views/home/teacher/teacher_registration_page.dart';
 import 'package:admin/widgets/my_loading.dart';
 import 'package:admin/widgets/my_text.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class TeacherPage extends StatefulWidget {
-  const TeacherPage({Key? key, required this.adminData}) : super(key: key);
+class ParentPage extends StatefulWidget {
+  const ParentPage({Key? key, required this.adminDataParent}) : super(key: key);
 
-  final UserDataModel adminData;
+  final UserDataModel adminDataParent;
 
   @override
-  _TeacherPageState createState() => _TeacherPageState();
+  _ParentPageState createState() => _ParentPageState();
 }
 
-class _TeacherPageState extends State<TeacherPage> {
+class _ParentPageState extends State<ParentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +38,7 @@ class _TeacherPageState extends State<TeacherPage> {
       backgroundColor: blueDarkLight2,
       centerTitle: false,
       title: Text(
-        Constants.teacher,
+        Constants.parent,
         style: ExtraBoldTextStyle,
       ),
       actions: [
@@ -46,8 +47,8 @@ class _TeacherPageState extends State<TeacherPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TeacherRegistrationPage(
-                  adminData: widget.adminData,
+                builder: (context) => ParentRegistrationPage(
+                  adminDataParent: widget.adminDataParent,
                 ),
               ),
             );
@@ -72,8 +73,8 @@ class _TeacherPageState extends State<TeacherPage> {
   }
 
   _getBody() {
-    return StreamBuilder<QuerySnapshot<TeacherDataModel>>(
-      stream: FirestoreMethods().getTeachers().snapshots(),
+    return StreamBuilder<QuerySnapshot<ParentDataModel>>(
+      stream: FirestoreMethods().getParents().snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const MyLoading();
         return ListView.builder(
@@ -83,8 +84,7 @@ class _TeacherPageState extends State<TeacherPage> {
             vertical: 6.h,
           ),
           itemBuilder: (context, index) {
-            TeacherDataModel model = snapshot.data!.docs[index].data();
-            snapshot.data!.docs[index].reference;
+            ParentDataModel model = snapshot.data!.docs[index].data();
             return Container(
               margin: EdgeInsets.symmetric(
                 horizontal: 8.w,
@@ -134,7 +134,7 @@ class _TeacherPageState extends State<TeacherPage> {
     );
   }
 
-  _nameIcon(TeacherDataModel model) {
+  _nameIcon(ParentDataModel model) {
     return SizedBox(
       height: 56.w,
       width: 56.w,
