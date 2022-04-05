@@ -3,7 +3,7 @@ import 'package:admin/utils/app_asset_path.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_icon.dart';
 import 'package:admin/utils/constants.dart';
-import 'package:admin/views/home/parent_page.dart';
+import 'package:admin/views/home/parent/parent_page.dart';
 import 'package:admin/views/home/teacher/teacher_page.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -141,7 +141,9 @@ class _HomePageState extends State<HomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ParentPage(),
+        builder: (context) => ParentPage(
+          adminDataParent: _userDataModel!,
+        ),
       ),
     );
   }

@@ -1,13 +1,16 @@
+import 'package:admin/model/user_data_model.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/constants.dart';
-import 'package:admin/views/home/parent_registration_page.dart';
+import 'package:admin/views/home/parent/parent_registration_page.dart';
 import 'package:admin/views/home/teacher/teacher_registration_page.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ParentPage extends StatefulWidget {
-  const ParentPage({Key? key}) : super(key: key);
+  const ParentPage({Key? key, required this.adminDataParent}) : super(key: key);
+
+  final UserDataModel adminDataParent;
 
   @override
   _ParentPageState createState() => _ParentPageState();
@@ -37,7 +40,9 @@ class _ParentPageState extends State<ParentPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ParentRegistrationPage(),
+                builder: (context) => ParentRegistrationPage(
+                  adminDataParent: widget.adminDataParent,
+                ),
               ),
             );
           },
