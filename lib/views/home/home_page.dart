@@ -1,4 +1,5 @@
 import 'package:admin/model/user_data_model.dart';
+import 'package:admin/service/firestore_methods.dart';
 import 'package:admin/utils/app_asset_path.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_icon.dart';
@@ -31,17 +32,8 @@ class _HomePageState extends State<HomePage> {
   UserDataModel? _userDataModel;
 
   Future<void> _getUserData() async {
-    QuerySnapshot<UserDataModel> data = await FirebaseFirestore.instance
-        .collection('users')
-        .doc('users')
-        .collection('admin')
-        .where('uid', isEqualTo: widget.uid)
-        .withConverter<UserDataModel>(
-          fromFirestore: (snapshots, _) =>
-              UserDataModel.fromJson(snapshots.data()!),
-          toFirestore: (UserDataModel, _) => UserDataModel.toJson(),
-        )
-        .get();
+    final QuerySnapshot<UserDataModel> data =
+        await FirestoreMethods().getAdminByUID(widget.uid).get();
 
     setState(() {
       _userDataModel = data.docs.first.data();
@@ -414,12 +406,16 @@ class _HomePageState extends State<HomePage> {
               ),
               if (_isEditEnabled)
                 _getActionIcon(
-                    bgColor: blueDarkLight,
-                    iconData: Icons.edit_outlined,
-                    onTap: () {}),
+                  bgColor: blueDarkLight,
+                  iconData: Icons.edit_outlined,
+                  onTap: () {},
+                ),
               if (_isEditEnabled)
                 _getActionIcon(
-                    bgColor: red, iconData: Icons.delete_outline, onTap: () {}),
+                  bgColor: red,
+                  iconData: Icons.delete_outline,
+                  onTap: () {},
+                ),
             ],
           ),
         );
@@ -435,17 +431,20 @@ class _HomePageState extends State<HomePage> {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(14.w),
-      child: Container(
-        height: double.infinity,
-        margin: EdgeInsets.all(4.w),
-        padding: EdgeInsets.all(12.w),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(14.w),
-        ),
-        child: Icon(
-          iconData,
-          color: white,
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Container(
+          height: double.infinity,
+          margin: EdgeInsets.all(4.w),
+          padding: EdgeInsets.all(12.w),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(14.w),
+          ),
+          child: Icon(
+            iconData,
+            color: white,
+          ),
         ),
       ),
     );

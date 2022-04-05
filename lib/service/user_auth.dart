@@ -5,12 +5,14 @@ import 'package:admin/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserAuth {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   Future<UserCredential> userSignIn(
       {required String email, required String password}) async {
     var _userCredential;
     try {
-      _userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      _userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
     } on SocketException {
       throw FetchDataException(Constants.networkIssue);
     } on FirebaseAuthException catch (e) {
@@ -23,8 +25,8 @@ class UserAuth {
       {required String email, required String password}) async {
     var _userCredential;
     try {
-      _userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      _userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email, password: password);
     } on SocketException {
       throw FetchDataException(Constants.networkIssue);
     } on FirebaseAuthException catch (e) {
@@ -35,7 +37,7 @@ class UserAuth {
 
   Future<void> logout() async {
     try {
-      await FirebaseAuth.instance.signOut();
+      await _firebaseAuth.signOut();
     } on SocketException {
       throw FetchDataException(Constants.networkIssue);
     } on FirebaseAuthException catch (e) {

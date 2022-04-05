@@ -24,6 +24,8 @@ const Color greyLight = Color(0xffd2d2d2);
 const Color greyLight30 = Color(0x30d2d2d2);
 const Color greyLight40 = Color(0x40d2d2d2);
 const Color greyLight60 = Color(0x60d2d2d2);
-const Color redLight = Color(0xffAF513A);
-const Color red = Colors.redAccent;
 const Color black = Colors.black;
+
+const Color red = Color(0xffff3d49);
+const Color red40 = Color(0x40ff3d49);
+const Color red90 = Color(0x90ff3d49);

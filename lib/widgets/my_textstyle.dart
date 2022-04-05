@@ -77,7 +77,7 @@ final logTextStyle = TextStyle(
 
 final logoutTextStyle = TextStyle(
     fontSize: 18.sp,
-    color: redLight,
+    color: red,
     fontWeight: fwBold
 );
 
@@ -134,6 +134,11 @@ final classTextStyle = TextStyle(
 final NameBoldTextStyle = TextStyle(
   color:blueDark,
   fontWeight: fwBold
+);
+final ts14BlueDarkBold = TextStyle(
+    color:blueDark,
+    fontSize: 14.sp,
+    fontWeight: fwBold
 );
 
 final emailBoldTextStyle = TextStyle(
