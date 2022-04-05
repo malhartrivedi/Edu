@@ -648,13 +648,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
         uid: userCred.user!.uid,
         name: name,
         email: email,
-        school: school,
         phone: int.parse(phone),
         address: address,
         city: city,
         state: state,
-        post: int.parse(post),
         instituteId: Global.getUniqueCode(),
+        school: school,
+        post: int.parse(post),
       );
 
       await FirestoreMethods().addData(UserType.Admin, model.toJson());

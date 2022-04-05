@@ -23,7 +23,7 @@ class _TeacherRegistrationPageState extends State<TeacherRegistrationPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
-  final _schoolController = TextEditingController();
+  final _instituteNameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _addressController = TextEditingController();
   final _cityController = TextEditingController();
@@ -35,7 +35,7 @@ class _TeacherRegistrationPageState extends State<TeacherRegistrationPage> {
 
   String get email => _emailController.value.text;
 
-  String get school => _schoolController.value.text;
+  String get instituteName => _instituteNameController.value.text;
 
   String get phone => _phoneController.value.text;
 
@@ -51,7 +51,7 @@ class _TeacherRegistrationPageState extends State<TeacherRegistrationPage> {
 
   bool _nameFocus = false;
   bool _emailFocus = false;
-  bool _schoolFocus = false;
+  bool _instituteNameFocus = false;
   bool _phoneFocus = false;
   bool _addressFocus = false;
   bool _cityFocus = false;
@@ -61,7 +61,7 @@ class _TeacherRegistrationPageState extends State<TeacherRegistrationPage> {
 
   bool _isNameValid = false;
   bool _isEmailValid = false;
-  bool _isSchoolValid = false;
+  bool _isInstituteNameValid = false;
   bool _isPhoneValid = false;
   bool _isAddressValid = false;
   bool _isCityValid = false;
@@ -73,7 +73,7 @@ class _TeacherRegistrationPageState extends State<TeacherRegistrationPage> {
   void initState() {
     UserDataModel model = widget.adminData;
     _instituteController.text = model.instituteId;
-    _schoolController.text = model.school;
+    _instituteNameController.text = model.school;
     super.initState();
   }
 
@@ -148,14 +148,14 @@ class _TeacherRegistrationPageState extends State<TeacherRegistrationPage> {
       );
 
   Widget get _schoolTextField => _getTextField(
-        _schoolController,
+        _instituteNameController,
         label: Constants.schoolName,
-        hasFocus: _schoolFocus,
-        isValid: _isSchoolValid,
+        hasFocus: _instituteNameFocus,
+        isValid: _isInstituteNameValid,
         readOnly: true,
         suffixIcon: Icons.check,
         onFocusChange: (haveFocus) {
-          setState(() => _schoolFocus = haveFocus);
+          setState(() => _instituteNameFocus = haveFocus);
         },
       );
 
@@ -270,7 +270,7 @@ class _TeacherRegistrationPageState extends State<TeacherRegistrationPage> {
     TeacherDataModel model = TeacherDataModel(
       uid: '',
       instituteId: instituteId,
-      instituteName: school,
+      instituteName: instituteName,
       name: name,
       email: email,
       phone: int.parse(phone),

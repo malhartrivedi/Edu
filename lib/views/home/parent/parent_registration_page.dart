@@ -22,7 +22,7 @@ class _ParentRegistrationPageState extends State<ParentRegistrationPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
-  final _schoolController = TextEditingController();
+  final _instituteNameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _addressController = TextEditingController();
   final _cityController = TextEditingController();
@@ -34,7 +34,7 @@ class _ParentRegistrationPageState extends State<ParentRegistrationPage> {
 
   String get email => _emailController.value.text;
 
-  String get school => _schoolController.value.text;
+  String get instituteName => _instituteNameController.value.text;
 
   String get phone => _phoneController.value.text;
 
@@ -72,7 +72,7 @@ class _ParentRegistrationPageState extends State<ParentRegistrationPage> {
   void initState() {
     UserDataModel model = widget.adminDataParent;
     _instituteController.text = model.instituteId;
-    _schoolController.text = model.school;
+    _instituteNameController.text = model.school;
     super.initState();
   }
 
@@ -147,7 +147,7 @@ class _ParentRegistrationPageState extends State<ParentRegistrationPage> {
       );
 
   Widget get _schoolTextField => _getTextField(
-    _schoolController,
+    _instituteNameController,
     label: Constants.schoolName,
     hasFocus: _schoolFocus,
     isValid: _isSchoolValid,
@@ -269,7 +269,7 @@ class _ParentRegistrationPageState extends State<ParentRegistrationPage> {
     ParentDataModel model = ParentDataModel(
       uid: '',
       instituteId: institute,
-      instituteName: school,
+      instituteName: instituteName,
       name: name,
       email: email,
       phone: int.parse(phone),

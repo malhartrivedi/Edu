@@ -1,3 +1,4 @@
+import 'package:admin/model/parent_data_model.dart';
 import 'package:admin/model/teacher_data_model.dart';
 import 'package:admin/model/user_data_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,6 +34,14 @@ class FirestoreMethods {
       fromFirestore: (snapshots, _) =>
           TeacherDataModel.fromJson(snapshots.data()!),
       toFirestore: (teacherDataModel, _) => teacherDataModel.toJson(),
+    );
+  }
+
+  CollectionReference<ParentDataModel> getParents() {
+    return _getCollectionRef(UserType.Parent).withConverter<ParentDataModel>(
+      fromFirestore: (snapshots, _) =>
+          ParentDataModel.fromJson(snapshots.data()!),
+      toFirestore: (parentDataModel, _) => parentDataModel.toJson(),
     );
   }
 
