@@ -52,7 +52,7 @@ class Constants {
   static String post = 'Post Code';
   static String institute = 'Institute Id';
   static String postB = 'POST-CODE';
-  static String already = 'Already have and Account?';
+  static String already = 'Already have an Account?';
   static String logoutSure = 'Are you sure, you want to logout?';
   static String deleteSure = 'Are you sure, you want to Delete?';
   static String confirmPassword = 'Confirm Password';
