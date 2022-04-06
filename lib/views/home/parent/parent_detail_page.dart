@@ -21,6 +21,15 @@ class ParentDetailPage extends StatefulWidget {
 }
 
 class _ParentDetailPageState extends State<ParentDetailPage> {
+
+
+  @override
+  void initState() {
+    modelData = widget.model;
+  }
+
+  late ParentDataModel modelData;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +41,6 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
   }
 
   _getBody() {
-    ParentDataModel parentModel = widget.model;
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -45,7 +53,7 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
               color: greyWhite,
               child: Center(
                 child: Text(
-                  '${parentModel.name![0].toUpperCase()}',
+                  '${modelData.name![0].toUpperCase()}',
                   style: ThemeBoldTextStyle,
                 ),
               ),
@@ -56,21 +64,21 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
             ),
           ),
           SizedBox(height: 20.h),
-          Text('${parentModel.name}', style: ThemeNameBoldTextStyle),
-          Text('${parentModel.email}', style: ThemeEmailBoldTextStyle),
+          Text('${modelData.name}', style: ThemeNameBoldTextStyle),
+          Text('${modelData.email}', style: ThemeEmailBoldTextStyle),
           SizedBox(height: 32.h),
           _getDivider(),
-          _getDetailItem(Constants.phoneB, '+91-${parentModel.phone}'),
+          _getDetailItem(Constants.phoneB, '+91-${modelData.phone}'),
           _getDivider(),
-          _getDetailItem(Constants.schoolB, '${parentModel.instituteName}'),
+          _getDetailItem(Constants.schoolB, '${modelData.instituteName}'),
           _getDivider(),
-          _getDetailItem(Constants.addressB, '${parentModel.address}'),
+          _getDetailItem(Constants.addressB, '${modelData.address}'),
           _getDivider(),
-          _getDetailItem(Constants.cityB, '${parentModel.city}'),
+          _getDetailItem(Constants.cityB, '${modelData.city}'),
           _getDivider(),
-          _getDetailItem(Constants.stateB, '${parentModel.state}'),
+          _getDetailItem(Constants.stateB, '${modelData.state}'),
           _getDivider(),
-          _getDetailItem(Constants.postB, '${parentModel.postcode}'),
+          _getDetailItem(Constants.postB, '${modelData.postcode}'),
           _getDivider(),
           SizedBox(height: 20.h),
           Padding(
@@ -81,12 +89,19 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
                 Expanded(
                   flex: 1,
                   child: ElevatedButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ParentEditPage(model: parentModel,reference: widget.reference),
-                      ),
-                    ),
+                    onPressed: () async {
+                      final value = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ParentEditPage(model: modelData,reference: widget.reference),
+                        ),
+                      );
+                      if(value != null){
+                        setState(() {
+                          modelData = value;
+                        });
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       elevation: 6.0,
                       primary: greyGreenDarkLight,
@@ -184,4 +199,6 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
       ),
     );
   }
+
+
 }

@@ -251,9 +251,12 @@ class _ParentEditPageState extends State<ParentEditPage> {
       city: city,
       state: state,
       postcode: int.parse(postCode),
+      createdAt: widget.model.createdAt,
+      instituteId: widget.model.instituteId,
+      updatedAt: DateTime.now(),
     );
     await widget.reference?.update(parentDataModel.toJson());
-    Navigator.pop(context);
+    Navigator.pop(context,parentDataModel);
   }
 
   _getContainerOutLine({required Widget child, required bool hasFocus}) {
