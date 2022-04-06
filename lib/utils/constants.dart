@@ -8,6 +8,7 @@ class Constants {
   static String no = 'No';
   static String yes = 'Yes';
   static String logoutB = 'LOGOUT';
+  static String delete = 'Delete';
   static String edit = 'Edit';
   static String NameInitial = 'Malhar';
   static String teacherInitial = 'Raju';
@@ -19,7 +20,10 @@ class Constants {
   static String loading = 'Loading';
   static String parentRegistration = 'Parent Registration';
   static String NameEmail = 'malhar@gmail.com';
-  static String editProfile = 'EDIT PROFILE';
+  static String editProfileB = 'EDIT PROFILE';
+  static String editProfile = 'Edit Profile';
+  static String editTeacherProfile = 'Edit Teacher Profile';
+  static String editParentProfile = 'Edit Parent Profile';
   static String changePassword = 'CHANGE PASSWORD';
   static String changePasswordSmall = 'Change Password';
   static String home = 'Home';
@@ -50,6 +54,7 @@ class Constants {
   static String postB = 'POST-CODE';
   static String already = 'Already have and Account?';
   static String logoutSure = 'Are you sure, you want to logout?';
+  static String deleteSure = 'Are you sure, you want to Delete?';
   static String confirmPassword = 'Confirm Password';
   static String confirm = 'confirm';
   static String enterName = 'Please Enter Name';

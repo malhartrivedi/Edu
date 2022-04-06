@@ -22,6 +22,9 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         child: Text(
-                          Constants.editProfile,
+                          Constants.editProfileB,
                           textAlign: TextAlign.center,
                           style: sizeWhiteTextStyle,
                         ),
@@ -161,20 +164,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Stream<QuerySnapshot<UserDataModel>>? _getData(String uid) {
-    Stream<QuerySnapshot<UserDataModel>>? stream = FirebaseFirestore.instance
-        .collection('users')
-        .doc('users')
-        .collection('admin')
-        .where('uid', isEqualTo: uid)
-        .withConverter<UserDataModel>(
-            fromFirestore: (snapshots, _) =>
-                UserDataModel.fromJson(snapshots.data()!),
-            toFirestore: (UserDataModel, _) => UserDataModel.toJson())
-        .snapshots();
-    return stream;
-  }
-
   _getDivider() {
     return Divider(color: blueDarkLight2, height: 1);
   }
@@ -220,8 +209,8 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
               _logout();
+              Navigator.pop(context);
             },
             child: Text(Constants.yes, style: YesTextStyle),
           )

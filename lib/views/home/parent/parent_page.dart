@@ -5,6 +5,7 @@ import 'package:admin/service/firestore_methods.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_fonts.dart';
 import 'package:admin/utils/constants.dart';
+import 'package:admin/views/home/parent/parent_detail_page.dart';
 import 'package:admin/views/home/parent/parent_registration_page.dart';
 import 'package:admin/views/home/teacher/teacher_registration_page.dart';
 import 'package:admin/widgets/my_loading.dart';
@@ -85,47 +86,52 @@ class _ParentPageState extends State<ParentPage> {
           ),
           itemBuilder: (context, index) {
             ParentDataModel model = snapshot.data!.docs[index].data();
-            return Container(
-              margin: EdgeInsets.symmetric(
-                horizontal: 8.w,
-                vertical: 6.h,
-              ),
-              padding: EdgeInsets.all(6.w),
-              decoration: BoxDecoration(
-                  border: Border.all(color: blueDarkLight3),
-                  borderRadius: BorderRadius.circular(14.w)),
-              child: Row(
-                children: [
-                  _nameIcon(model),
-                  SizedBox(width: 6.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        MyText(
-                          model.name!,
-                          fontSize: 14.sp,
-                          fontWeight: fwSemiBold,
-                        ),
-                        SizedBox(height: 2.h),
-                        MyText(
-                          model.email!,
-                          color: greyGreenDark,
-                        ),
-                      ],
+            DocumentReference reference = snapshot.data!.docs[index].reference;
+            return InkWell(
+              onTap: () => Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ParentDetailPage(model: model, reference: reference,))),
+              child: Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: 8.w,
+                  vertical: 6.h,
+                ),
+                padding: EdgeInsets.all(6.w),
+                decoration: BoxDecoration(
+                    border: Border.all(color: blueDarkLight3),
+                    borderRadius: BorderRadius.circular(14.w)),
+                child: Row(
+                  children: [
+                    _nameIcon(model),
+                    SizedBox(width: 6.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          MyText(
+                            model.name!,
+                            fontSize: 14.sp,
+                            fontWeight: fwSemiBold,
+                          ),
+                          SizedBox(height: 2.h),
+                          MyText(
+                            model.email!,
+                            color: greyGreenDark,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.w),
-                    child: Icon(
-                      model.uid!.isEmpty
-                          ? Icons.error_outline
-                          : Icons.check_circle_outline,
-                      color: model.uid!.isEmpty ? red90 : greenLight,
-                      size: 32.sp,
+                    Padding(
+                      padding: EdgeInsets.all(8.w),
+                      child: Icon(
+                        model.uid!.isEmpty
+                            ? Icons.error_outline
+                            : Icons.check_circle_outline,
+                        color: model.uid!.isEmpty ? red90 : greenLight,
+                        size: 32.sp,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },

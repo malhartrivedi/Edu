@@ -30,6 +30,8 @@ class _HomePageState extends State<HomePage> {
   bool _isClassValid = false;
   bool _isEditEnabled = false;
   UserDataModel? _userDataModel;
+  DocumentReference? reference;
+
 
   Future<void> _getUserData() async {
     final QuerySnapshot<UserDataModel> data =
@@ -123,7 +125,7 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(
         builder: (context) => TeacherPage(
-          adminData: _userDataModel!,
+          adminData: _userDataModel!
         ),
       ),
     );

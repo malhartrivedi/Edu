@@ -82,7 +82,7 @@ class _EditProfileState extends State<EditProfile> {
       key: formKey,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Edit Profile', style: ExtraBoldTextStyle),
+          title: Text(Constants.editProfile, style: ExtraBoldTextStyle),
           backgroundColor: blueDarkLight2,
         ),
         body: SafeArea(
