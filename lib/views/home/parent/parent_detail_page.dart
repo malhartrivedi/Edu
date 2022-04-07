@@ -4,6 +4,7 @@ import 'package:admin/service/firestore_methods.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_icon.dart';
 import 'package:admin/utils/constants.dart';
+import 'package:admin/views/home/parent/new_child_page.dart';
 import 'package:admin/views/home/parent/parent_edit_page.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -81,6 +82,27 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
           _getDetailItem(Constants.postB, '${modelData.postcode}'),
           _getDivider(),
           SizedBox(height: 20.h),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>NewChildPage())),
+                style: ElevatedButton.styleFrom(
+                  elevation: 6.0,
+                  primary: greyGreenDarkLight,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: Text(
+                  Constants.addNewB,
+                  style: sizeWhiteTextStyle,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 10.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Row(
@@ -199,6 +221,4 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
       ),
     );
   }
-
-
 }

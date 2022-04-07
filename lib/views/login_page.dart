@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
               style: h4TextStyle,
             ),
             SizedBox(height: 30.h),
-            _emailTextField(),
+            emailTextField,
             SizedBox(height: 16.h),
             _passwordTextField(),
             SizedBox(height: 36.h),
@@ -89,52 +89,26 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _emailTextField() {
-    return Container(
-      padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(
-        color: greyLight30,
-        borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: emailFocus == true ? blueDark : white),
-      ),
-      child: Focus(
-        child: TextFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: emailController,
-          keyboardType: TextInputType.emailAddress,
-          style: h2TextStyle,
-          decoration: InputDecoration(
-            suffixIcon: Icon(
-              Icons.email,
-              color:  _isEmail == true ? blueDark : grey,
-            ),
-            contentPadding: EdgeInsets.symmetric(
-              vertical: 6.h,
-              horizontal: 6.w,
-            ),
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            labelText: Constants.email,
-            labelStyle: TextStyle(
-              color: greyDark,
-            ),
-          ),
-          validator: (email) {
-            if (email!.isEmpty) {
-              _isEmail = false;
-              return Constants.enterEmail;
-            } else if (!RegExp(Constants.emailValidator).hasMatch(email)) {
-              _isEmail = true;
-              return Constants.validEmail;
-            }
-            return null;
-          },
-        ),
-        onFocusChange: (email) {
-          setState(() => emailFocus = email);
-        },
-      ),
-    );
+  Widget get emailTextField => _getTextField(emailController,
+      label: Constants.email,
+      hasFocus: emailFocus,
+      isValid: _isEmail,
+      suffixIcon: Icons.email,
+      validator: emailValidator, onFocusChange: (emailFoc) {
+        setState(() {
+          emailFocus = emailFoc;
+        });
+      });
+
+  String? emailValidator(String? value) {
+    if (value!.isEmpty) {
+      _isEmail = false;
+      return Constants.enterEmail;
+    } else if (!RegExp(Constants.emailValidator).hasMatch(value)) {
+      _isEmail = true;
+      return Constants.invalidEmail;
+    }
+    return null;
   }
 
   _passwordTextField() {
@@ -253,5 +227,60 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       Global.showSnackBar(context, e.toString());
     }
+  }
+
+  _getTextField(
+      TextEditingController controller, {
+        required String label,
+        required bool hasFocus,
+        required bool isValid,
+        required IconData suffixIcon,
+        bool readOnly = false,
+        TextInputType? textInputType,
+        FormFieldValidator<String>? validator,
+        ValueChanged<bool>? onFocusChange,
+      }) {
+    return _getContainerOutLine(
+      hasFocus: hasFocus,
+      child: Focus(
+        child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          controller: controller,
+          readOnly: readOnly,
+          keyboardType: textInputType,
+          style: h2TextStyle,
+          decoration: InputDecoration(
+            suffixIcon: Icon(
+              suffixIcon,
+              color: isValid ? red : grey,
+            ),
+            contentPadding: EdgeInsets.symmetric(
+              vertical: 6.h,
+              horizontal: 6.w,
+            ),
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            labelText: label,
+            labelStyle: TextStyle(
+              color: greyDark,
+            ),
+          ),
+          validator: validator,
+        ),
+        onFocusChange: onFocusChange,
+      ),
+    );
+  }
+
+  _getContainerOutLine({required Widget child, required bool hasFocus}) {
+    return Container(
+      padding: EdgeInsets.all(8.w),
+      decoration: BoxDecoration(
+        color: greyLight30,
+        borderRadius: BorderRadius.all(Radius.circular(14.w)),
+        border: Border.all(color: hasFocus ? blueDark : white),
+      ),
+      child: child,
+    );
   }
 }

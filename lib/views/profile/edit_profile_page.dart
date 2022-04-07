@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditProfile extends StatefulWidget {
-  EditProfile({Key? key, required this.userModel, required this.reference}) : super(key: key);
+  EditProfile({Key? key, required this.userModel, required this.reference})
+      : super(key: key);
   UserDataModel userModel;
   DocumentReference reference;
 
@@ -98,21 +99,21 @@ class _EditProfileState extends State<EditProfile> {
       padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
       child: Column(
         children: [
-          _nameTextField(),
-          SizedBox(height: 16.h),
-          _emailTextField(),
-          SizedBox(height: 16.h),
-          _schoolTextField(),
-          SizedBox(height: 16.h),
-          _phoneTextField(),
-          SizedBox(height: 16.h),
-          _addressTextField(),
-          SizedBox(height: 16.h),
-          _cityTextField(),
-          SizedBox(height: 16.h),
-          _stateTextField(),
-          SizedBox(height: 16.h),
-          _postTextField(),
+          nameTextField,
+          _sizedHeight,
+          emailTextField,
+          _sizedHeight,
+          schoolTextField,
+          _sizedHeight,
+          phoneTextField,
+          _sizedHeight,
+          addressTextField,
+          _sizedHeight,
+          cityTextField,
+          _sizedHeight,
+          stateTextField,
+          _sizedHeight,
+          postTextField,
           SizedBox(height: 20.h),
           _submitButton(),
         ],
@@ -120,341 +121,178 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  _nameTextField() {
-    return _getContainerOutLine(
-      hasFocus: nameFocus == true,
-      child: Focus(
-        child: TextFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: nameController,
-          keyboardType: TextInputType.text,
-          style: h2TextStyle,
-          decoration: InputDecoration(
-            suffixIcon: Icon(
-              Icons.check,
-              color: _isNameValid == true ? blueDark : grey,
-            ),
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            labelText: Constants.name,
-            labelStyle: TextStyle(
-              color: greyDark,
-            ),
-          ),
-          validator: (name) {
-            if (name!.isEmpty) {
-              _isNameValid = false;
-              return Constants.enterName;
-            } else if (name.trim().length < 3) {
-              _isNameValid = true;
-              return Constants.validName;
-            }
-            return null;
-          },
-        ),
-        onFocusChange: (name) {
-          setState(() {
-            nameFocus = name;
-          });
-        },
-      ),
-    );
+  Widget get _sizedHeight => SizedBox(height: 16.h);
+
+  Widget get nameTextField => getTextFormField(nameController,
+          label: Constants.name,
+          hasFocus: nameFocus,
+          isValid: _isNameValid,
+          suffixIcon: Icons.check,
+          validator: nameValidator, onFocusChange: (nameFoc) {
+        setState(() {
+          nameFocus = nameFoc;
+        });
+      });
+
+  String? nameValidator(String? value) {
+    if (name.isEmpty) {
+      _isNameValid = false;
+      return Constants.enterName;
+    } else if (name.trim().length < 3) {
+      _isNameValid = true;
+      return Constants.validName;
+    }
+    return null;
   }
 
-  _emailTextField() {
-    return _getContainerOutLine(
-      hasFocus: emailFocus == true,
-      child: Focus(
-        child: TextFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: emailController,
-          keyboardType: TextInputType.emailAddress,
-          style: h2TextStyle,
-          decoration: InputDecoration(
-            suffixIcon: Icon(
-              Icons.email,
-              color: _isEmailValid == true ? blueDark : grey,
-            ),
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            labelText: Constants.email,
-            labelStyle: TextStyle(
-              color: greyDark,
-            ),
-          ),
-          validator: (email) {
-            if (email!.isEmpty) {
-              _isEmailValid = false;
-              return Constants.enterEmail;
-            } else if (!RegExp(Constants.emailValidator).hasMatch(email)) {
-              _isEmailValid = true;
-              return Constants.validEmail;
-            }
-            return null;
-          },
-        ),
-        onFocusChange: (email) {
-          setState(() {
-            emailFocus = email;
-          });
-        },
-      ),
-    );
+  Widget get emailTextField => getTextFormField(emailController,
+          label: Constants.email,
+          hasFocus: emailFocus,
+          isValid: _isEmailValid,
+          suffixIcon: Icons.email,
+          readOnly: true,
+          validator: emailValidator, onFocusChange: (emailFoc) {
+        setState(() {
+          emailFocus = emailFoc;
+        });
+      });
+
+  String? emailValidator(String? value) {
+    if (value!.isEmpty) {
+      _isEmailValid = false;
+      return Constants.enterEmail;
+    } else if (!RegExp(Constants.emailValidator).hasMatch(value)) {
+      _isEmailValid = true;
+      return Constants.invalidEmail;
+    }
+    return null;
   }
 
-  _schoolTextField() {
-    return _getContainerOutLine(
-      hasFocus: schoolFocus == true,
-      child: Focus(
-        child: TextFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: schoolController,
-          keyboardType: TextInputType.text,
-          style: h2TextStyle,
-          decoration: InputDecoration(
-            suffixIcon: Icon(
-              Icons.check,
-              color: _isSchoolValid == true ? blueDark : grey,
-            ),
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            labelText: Constants.schoolName,
-            labelStyle: TextStyle(
-              color: greyDark,
-            ),
-          ),
-          validator: (school) {
-            if (school!.isEmpty) {
-              _isSchoolValid = false;
-              return Constants.enterSchool;
-            } else if (school.isNotEmpty) {
-              _isSchoolValid = true;
-            }
-            return null;
-          },
-        ),
-        onFocusChange: (school) {
-          setState(() {
-            schoolFocus = school;
-          });
-        },
-      ),
-    );
+  Widget get schoolTextField => getTextFormField(phoneController,
+          label: Constants.school,
+          hasFocus: schoolFocus,
+          isValid: _isSchoolValid,
+          suffixIcon: Icons.check,
+          validator: schoolValidator, onFocusChange: (schoolFoc) {
+        setState(() {
+          schoolFocus = schoolFoc;
+        });
+      });
+
+  String? schoolValidator(String? value) {
+    if (school.isEmpty) {
+      _isSchoolValid = false;
+      return Constants.enterSchool;
+    } else if (school.isNotEmpty) {
+      _isSchoolValid = true;
+    }
+    return null;
   }
 
-  _phoneTextField() {
-    return _getContainerOutLine(
-      hasFocus: phoneFocus == true,
-      child: Focus(
-        child: TextFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: phoneController,
-          keyboardType: TextInputType.phone,
-          style: h2TextStyle,
-          decoration: InputDecoration(
-            suffixIcon: Icon(
-              Icons.phone,
-              color: _isPhoneValid == true ? blueDark : grey,
-            ),
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            labelText: Constants.phone,
-            labelStyle: TextStyle(
-              color: greyDark,
-            ),
-          ),
-          validator: (phone) {
-            if (phone!.isEmpty) {
-              _isPhoneValid = false;
-              return Constants.enterPhone;
-            } else if (phone.trim().length < 10) {
-              _isPhoneValid = true;
-              return Constants.validPhone;
-            }
-            return null;
-          },
-        ),
-        onFocusChange: (phone) {
-          setState(() {
-            phoneFocus = phone;
-          });
-        },
-      ),
-    );
+  Widget get phoneTextField => getTextFormField(phoneController,
+          label: Constants.phone,
+          hasFocus: phoneFocus,
+          isValid: _isPhoneValid,
+          suffixIcon: Icons.phone,
+          validator: phoneValidator, onFocusChange: (phoneFoc) {
+        setState(() {
+          phoneFocus = phoneFoc;
+        });
+      });
+
+  String? phoneValidator(String? value) {
+    if (value!.isEmpty) {
+      _isPhoneValid = false;
+      return Constants.enterPhone;
+    } else if (phone.trim().length < 10) {
+      _isPhoneValid = true;
+      return Constants.validPhone;
+    }
+    return null;
   }
 
-  _addressTextField() {
-    return _getContainerOutLine(
-      hasFocus: addressFocus == true,
-      child: Focus(
-        child: TextFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: addressController,
-          keyboardType: TextInputType.text,
-          style: h2TextStyle,
-          decoration: InputDecoration(
-            suffixIcon: Icon(
-              Icons.home,
-              color: _isAddressValid == true ? blueDark : grey,
-            ),
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            labelText: Constants.address,
-            labelStyle: TextStyle(
-              color: greyDark,
-            ),
-          ),
-          validator: (address) {
-            if (address!.isEmpty) {
-              _isAddressValid = false;
-              return Constants.enterAddress;
-            } else if (address.isNotEmpty) {
-              _isAddressValid = true;
-            }
-            return null;
-          },
-        ),
-        onFocusChange: (address) {
-          setState(() {
-            addressFocus = address;
-          });
-        },
-      ),
-    );
+  Widget get addressTextField => getTextFormField(addressController,
+          label: Constants.address,
+          hasFocus: addressFocus,
+          isValid: _isPhoneValid,
+          suffixIcon: Icons.home,
+          validator: addressValidator, onFocusChange: (addressFoc) {
+        setState(() {
+          addressFocus = addressFoc;
+        });
+      });
+
+  String? addressValidator(String? value) {
+    if (value!.isEmpty) {
+      _isAddressValid = false;
+      return Constants.enterAddress;
+    } else if (address.isNotEmpty) {
+      _isAddressValid = true;
+    }
+    return null;
   }
 
-  _cityTextField() {
-    return _getContainerOutLine(
-      hasFocus: cityFocus == true,
-      child: Focus(
-        child: TextFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: cityController,
-          keyboardType: TextInputType.text,
-          style: h2TextStyle,
-          decoration: InputDecoration(
-            suffixIcon: Icon(
-              Icons.check,
-              color: _isCityValid == true ? blueDark : grey,
-            ),
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            labelText: Constants.city,
-            labelStyle: TextStyle(
-              color: greyDark,
-            ),
-          ),
-          validator: (city) {
-            if (city!.isEmpty) {
-              _isCityValid = false;
-              return Constants.enterCity;
-            } else if (city.isNotEmpty) {
-              _isCityValid = true;
-            }
-            return null;
-          },
-        ),
-        onFocusChange: (city) {
-          setState(() {
-            cityFocus = city;
-          });
-        },
-      ),
-    );
+  Widget get cityTextField => getTextFormField(cityController,
+          label: Constants.city,
+          hasFocus: cityFocus,
+          isValid: _isCityValid,
+          suffixIcon: Icons.check,
+          validator: cityValidator, onFocusChange: (cityFoc) {
+        setState(() {
+          cityFocus = cityFoc;
+        });
+      });
+
+  String? cityValidator(String? value) {
+    if (city.isEmpty) {
+      _isCityValid = false;
+      return Constants.enterCity;
+    } else if (city.isNotEmpty) {
+      _isCityValid = true;
+    }
+    return null;
   }
 
-  _stateTextField() {
-    return _getContainerOutLine(
-      hasFocus: stateFocus == true,
-      child: Focus(
-        child: TextFormField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            controller: stateController,
-            keyboardType: TextInputType.text,
-            style: h2TextStyle,
-            decoration: InputDecoration(
-              suffixIcon: Icon(
-                Icons.check,
-                color: _isStateValid == true ? blueDark : grey,
-              ),
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
-              focusedBorder: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              labelText: Constants.state,
-              labelStyle: TextStyle(
-                color: greyDark,
-              ),
-            ),
-            validator: (state) {
-              if (state!.isEmpty) {
-                _isStateValid = false;
-                return Constants.enterState;
-              } else if (state.isNotEmpty) {
-                _isStateValid = true;
-              }
-              return null;
-            }),
-        onFocusChange: (state) {
-          setState(() {
-            stateFocus = state;
-          });
-        },
-      ),
-    );
+  Widget get stateTextField => getTextFormField(stateController,
+          label: Constants.state,
+          hasFocus: stateFocus,
+          isValid: _isStateValid,
+          suffixIcon: Icons.check,
+          validator: stateValidator, onFocusChange: (stateFoc) {
+        setState(() {
+          stateFocus = stateFoc;
+        });
+      });
+
+  String? stateValidator(String? value) {
+    if (value!.isEmpty) {
+      _isStateValid = false;
+      return Constants.enterState;
+    } else if (state.isNotEmpty) {
+      _isStateValid = true;
+    }
+    return null;
   }
 
-  _postTextField() {
-    return _getContainerOutLine(
-      hasFocus: postFocus == true,
-      child: Focus(
-        child: TextFormField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            controller: postController,
-            keyboardType: TextInputType.number,
-            style: h2TextStyle,
-            decoration: InputDecoration(
-              suffixIcon: Icon(
-                Icons.check,
-                color: _isPostValid == true ? blueDark : grey,
-              ),
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 6.h, horizontal: 6.w),
-              focusedBorder: InputBorder.none,
-              enabledBorder: InputBorder.none,
-              labelText: Constants.post,
-              labelStyle: TextStyle(
-                color: greyDark,
-              ),
-            ),
-            validator: (post) {
-              if (post!.isEmpty) {
-                _isPostValid = false;
-                return Constants.enterPost;
-              } else if (post.isNotEmpty) {
-                _isPostValid = true;
-              }
-              return null;
-            }),
-        onFocusChange: (post) {
-          setState(() {
-            postFocus = post;
-          });
-        },
-      ),
-    );
+  Widget get postTextField => getTextFormField(postController,
+          label: Constants.post,
+          hasFocus: postFocus,
+          isValid: _isPostValid,
+          suffixIcon: Icons.check,
+          validator: postValidator, onFocusChange: (postFoc) {
+        setState(() {
+          postFocus = postFoc;
+        });
+      });
+
+  String? postValidator(String? value) {
+    if (value!.isEmpty) {
+      _isPostValid = false;
+      return Constants.enterPost;
+    } else if (post.isNotEmpty) {
+      _isPostValid = true;
+    }
+    return null;
   }
 
   _submitButton() {
@@ -476,18 +314,6 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  _getContainerOutLine({required Widget child, required bool hasFocus}) {
-    return Container(
-      padding: EdgeInsets.all(8.w),
-      decoration: BoxDecoration(
-        color: greyLight30,
-        borderRadius: BorderRadius.all(Radius.circular(14.w)),
-        border: Border.all(color: hasFocus ? blueDark : white),
-      ),
-      child: child,
-    );
-  }
-
   _getEditProfile() async {
     UserDataModel userDataModel = UserDataModel(
       uid: widget.userModel.uid,
@@ -503,5 +329,60 @@ class _EditProfileState extends State<EditProfile> {
     );
     await widget.reference.update(userDataModel.toJson());
     Navigator.pop(context);
+  }
+
+  getTextFormField(
+    TextEditingController controller, {
+    required String label,
+    required bool hasFocus,
+    required bool isValid,
+    required IconData suffixIcon,
+    bool readOnly = false,
+    TextInputType? textInputType,
+    FormFieldValidator<String>? validator,
+    ValueChanged<bool>? onFocusChange,
+  }) {
+    return _getContainerOutLine(
+      hasFocus: hasFocus,
+      child: Focus(
+        child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          controller: controller,
+          readOnly: readOnly,
+          keyboardType: textInputType,
+          style: h2TextStyle,
+          decoration: InputDecoration(
+            suffixIcon: Icon(
+              suffixIcon,
+              color: isValid ? red : grey,
+            ),
+            contentPadding: EdgeInsets.symmetric(
+              vertical: 6.h,
+              horizontal: 6.w,
+            ),
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            labelText: label,
+            labelStyle: TextStyle(
+              color: greyDark,
+            ),
+          ),
+          validator: validator,
+        ),
+        onFocusChange: onFocusChange,
+      ),
+    );
+  }
+
+  _getContainerOutLine({required Widget child, required bool hasFocus}) {
+    return Container(
+      padding: EdgeInsets.all(8.w),
+      decoration: BoxDecoration(
+        color: greyLight30,
+        borderRadius: BorderRadius.all(Radius.circular(14.w)),
+        border: Border.all(color: hasFocus ? blueDark : white),
+      ),
+      child: child,
+    );
   }
 }
