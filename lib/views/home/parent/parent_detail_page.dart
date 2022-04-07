@@ -12,18 +12,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ParentDetailPage extends StatefulWidget {
-  ParentDetailPage({Key? key,required this.model,required this.reference}) : super(key: key);
+  ParentDetailPage({Key? key, required this.model, required this.reference})
+      : super(key: key);
   ParentDataModel model;
   DocumentReference reference;
-
 
   @override
   _ParentDetailPageState createState() => _ParentDetailPageState();
 }
 
 class _ParentDetailPageState extends State<ParentDetailPage> {
-
-
   @override
   void initState() {
     modelData = widget.model;
@@ -44,8 +42,12 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
   _getBody() {
     return SingleChildScrollView(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Align(
+              alignment: Alignment.topLeft,
+              child: InkWell(
+                  onTap: () => Navigator.pop(context),
+                  child: Icon(Icons.arrow_back))),
           SizedBox(height: 50.h),
           SizedBox(
             height: 120.w,
@@ -87,7 +89,8 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>NewChildPage())),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => NewChildPage())),
                 style: ElevatedButton.styleFrom(
                   elevation: 6.0,
                   primary: greyGreenDarkLight,
@@ -115,10 +118,11 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
                       final value = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ParentEditPage(model: modelData,reference: widget.reference),
+                          builder: (context) => ParentEditPage(
+                              model: modelData, reference: widget.reference),
                         ),
                       );
-                      if(value != null){
+                      if (value != null) {
                         setState(() {
                           modelData = value;
                         });
@@ -193,7 +197,7 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
       context: context,
       builder: (BuildContext context) => AlertDialog(
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.w)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.w)),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

@@ -260,7 +260,9 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        Constants.createClass,
+                        classModel == null
+                            ? Constants.createClass
+                            : Constants.updateClassName,
                         style: classTextStyle,
                       ),
                       InkWell(

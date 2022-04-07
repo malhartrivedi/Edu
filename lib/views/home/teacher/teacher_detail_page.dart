@@ -44,6 +44,11 @@ class _TeacherDetailPageState extends State<TeacherDetailPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Align(
+              alignment: Alignment.topLeft,
+              child: InkWell(
+                  onTap: () => Navigator.pop(context),
+                  child: Icon(Icons.arrow_back))),
           SizedBox(height: 50.h),
           SizedBox(
             height: 120.w,
