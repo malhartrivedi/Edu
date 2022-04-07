@@ -12,7 +12,6 @@ import 'package:admin/widgets/my_loading.dart';
 import 'package:admin/widgets/my_text.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -34,91 +33,84 @@ class _HomePageState extends State<HomePage> {
   UserDataModel? _userDataModel;
   DocumentReference? _reference;
 
-  Future<void> _getUserData() async {
-    final QuerySnapshot<UserDataModel> data =
-        await FirestoreMethods().getAdminByUID(widget.uid).get();
-
-    setState(() {
-      _userDataModel = data.docs.first.data();
-      _reference = data.docs.first.reference;
-    });
-  }
-
-  @override
-  void initState() {
-    _getUserData();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
       child: Scaffold(
         backgroundColor: bgColor,
-        appBar: _getAppBar(),
-        body: AbsorbPointer(
-          absorbing: _userDataModel == null,
-          child: _getBody(),
+        body: SafeArea(
+          child: StreamBuilder<QuerySnapshot<UserDataModel>>(
+            stream: FirestoreMethods().getAdminByUID(widget.uid).snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return const MyLoading();
+              _userDataModel = snapshot.data!.docs.first.data();
+              _reference = snapshot.data!.docs.first.reference;
+              return _getBody();
+            },
+          ),
         ),
       ),
     );
   }
 
-  _getAppBar() {
-    return AppBar(
-      backgroundColor: whiteOff,
-      centerTitle: false,
-      titleSpacing: 12.w,
-      elevation: 0.7,
-      title: Row(
-        children: [
-          SizedBox(
-            height: 46.w,
-            width: 46.w,
-            child: Card(
-              color: greyWhite,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50.w),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Image.asset(AssetPath.iconSchool),
-              ),
-            ),
-          ),
-          SizedBox(width: 12.w),
-          if (_userDataModel != null)
-            Text(_userDataModel!.school, style: schoolTextStyle),
-        ],
-      ),
-    );
-  }
-
   _getBody() {
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
-      child: Column(
-        children: [
-          Row(
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+          child: Row(
             children: [
-              _getTeacherParentItem(
-                label: Constants.teacher,
-                assetPath: AssetPath.iconTeacher,
-                onTap: _goToTeacherPage,
+              SizedBox(
+                height: 46.w,
+                width: 46.w,
+                child: Card(
+                  color: greyWhite,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.w),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Image.asset(AssetPath.iconSchool),
+                  ),
+                ),
               ),
-              SizedBox(width: 10.w),
-              _getTeacherParentItem(
-                label: Constants.parent,
-                assetPath: AssetPath.iconFamily,
-                onTap: _goToParentPage,
+              SizedBox(width: 12.w),
+              Text(
+                _userDataModel!.school,
+                style: schoolTextStyle,
               ),
             ],
           ),
-          SizedBox(height: 12.h),
-          if (_userDataModel != null) _getClasses(),
-        ],
-      ),
+        ),
+        Divider(height: 1, color: blueDark),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    _getTeacherParentItem(
+                      label: Constants.teacher,
+                      assetPath: AssetPath.iconTeacher,
+                      onTap: _goToTeacherPage,
+                    ),
+                    SizedBox(width: 10.w),
+                    _getTeacherParentItem(
+                      label: Constants.parent,
+                      assetPath: AssetPath.iconFamily,
+                      onTap: _goToParentPage,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12.h),
+                _getClasses(),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -241,10 +233,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _getBottomSheet(  {ClassModel? model,DocumentReference? updateRef}) {
+  _getBottomSheet({ClassModel? classModel, DocumentReference? classReference}) {
     final classController = TextEditingController();
-    if (model != null) {
-      classController.text = model.name!;
+    if (classModel != null) {
+      classController.text = classModel.name!;
     }
     return showModalBottomSheet(
       isScrollControlled: true,
@@ -292,7 +284,8 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       _createClassesTextField(classController),
                       SizedBox(height: 12.h),
-                      _submitButton(classController, model,updateRef),
+                      _submitButton(
+                          classController, classModel, classReference),
                       SizedBox(height: 8.h),
                     ],
                   ),
@@ -348,24 +341,28 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _submitButton(TextEditingController classController, [ClassModel? model,DocumentReference? updateRef]) {
+  _submitButton(TextEditingController classController, ClassModel? classModel,
+      DocumentReference? classRef) {
     return ElevatedButton(
       onPressed: () {
         if (!formKey.currentState!.validate()) {
           return;
-        } else if (model == null) {
-          String className = classController.value.text;
-          FirestoreMethods()
-              .addClasses(className, _userDataModel!, _reference!);
-          Navigator.pop(context);
-          Global.showSnackBar(
-            context,
-            Constants.classAddedSuccessfully,
-            backgroundColor: greenLight,
-          );
-        }else{
-          _getUpdate(model,updateRef!,classController);
         }
+        String className = classController.value.text;
+        if (classModel == null) {
+          FirestoreMethods().addClass(className, _userDataModel!, _reference!);
+        } else {
+          FirestoreMethods().updateClass(className, classModel, classRef!);
+          setState(() => _isEditEnabled = false);
+        }
+        Navigator.pop(context);
+        Global.showSnackBar(
+          context,
+          classModel == null
+              ? Constants.classAddedSuccessfully
+              : Constants.classUpdatedSuccessfully,
+          backgroundColor: greenLight,
+        );
       },
       style: ElevatedButton.styleFrom(
         primary: greyGreenDarkLight,
@@ -418,7 +415,8 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
             itemBuilder: (context, index) {
               ClassModel model = snapshot.data!.docs[index].data();
-              DocumentReference classReference = snapshot.requireData.docs[index].reference;
+              DocumentReference classReference =
+                  snapshot.requireData.docs[index].reference;
               return IntrinsicHeight(
                 child: Row(
                   children: [
@@ -447,7 +445,10 @@ class _HomePageState extends State<HomePage> {
                         bgColor: blueDarkLight,
                         iconData: Icons.edit_outlined,
                         onTap: () {
-                          _getBottomSheet(model: model, updateRef: classReference);
+                          _getBottomSheet(
+                            classModel: model,
+                            classReference: classReference,
+                          );
                         },
                       ),
                     if (_isEditEnabled)
@@ -509,11 +510,5 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-  }
-
-  void _getUpdate(ClassModel? model, DocumentReference updateRef, TextEditingController classController) async {
-     model!.updatedAt = DateTime.now();
-     model.name = classController.text;
-     await updateRef.update(model.toJson());
   }
 }

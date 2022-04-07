@@ -60,8 +60,8 @@ class UserDataModel {
       'post': post,
       'institute_id': instituteId,
       "classes": List<dynamic>.from(classes.map((x) => x)),
-      "created_at": createdAt!.toUtc().toIso8601String(),
-      "updated_at": updatedAt!.toUtc().toIso8601String(),
+      "created_at": createdAt.toUtc().toIso8601String(),
+      "updated_at": updatedAt.toUtc().toIso8601String(),
     };
   }
 }

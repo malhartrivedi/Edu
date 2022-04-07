@@ -5,7 +5,6 @@ import 'package:admin/utils/constants.dart';
 import 'package:admin/utils/global.dart';
 import 'package:admin/views/registration_page.dart';
 import 'package:admin/widgets/my_textstyle.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -90,11 +89,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget get emailTextField => _getTextField(emailController,
-      label: Constants.email,
-      hasFocus: emailFocus,
-      isValid: _isEmail,
-      suffixIcon: Icons.email,
-      validator: emailValidator, onFocusChange: (emailFoc) {
+          label: Constants.email,
+          hasFocus: emailFocus,
+          isValid: _isEmail,
+          suffixIcon: Icons.email,
+          validator: emailValidator, onFocusChange: (emailFoc) {
         setState(() {
           emailFocus = emailFoc;
         });
@@ -127,13 +126,14 @@ class _LoginPageState extends State<LoginPage> {
           style: h2TextStyle,
           decoration: InputDecoration(
             suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() => _isVisible = !_isVisible);
-                },
-                icon: Icon(
-                  _isVisible ? Icons.visibility : Icons.visibility_off,
-                  color: _isVisible ? Colors.black : Colors.grey,
-                )),
+              onPressed: () {
+                setState(() => _isVisible = !_isVisible);
+              },
+              icon: Icon(
+                _isVisible ? Icons.visibility : Icons.visibility_off,
+                color: _isVisible ? Colors.black : Colors.grey,
+              ),
+            ),
             contentPadding: EdgeInsets.symmetric(
               vertical: 6.h,
               horizontal: 6.w,
@@ -230,16 +230,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _getTextField(
-      TextEditingController controller, {
-        required String label,
-        required bool hasFocus,
-        required bool isValid,
-        required IconData suffixIcon,
-        bool readOnly = false,
-        TextInputType? textInputType,
-        FormFieldValidator<String>? validator,
-        ValueChanged<bool>? onFocusChange,
-      }) {
+    TextEditingController controller, {
+    required String label,
+    required bool hasFocus,
+    required bool isValid,
+    required IconData suffixIcon,
+    bool readOnly = false,
+    TextInputType? textInputType,
+    FormFieldValidator<String>? validator,
+    ValueChanged<bool>? onFocusChange,
+  }) {
     return _getContainerOutLine(
       hasFocus: hasFocus,
       child: Focus(

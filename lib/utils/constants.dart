@@ -94,4 +94,5 @@ class Constants {
   static String teacherRegisteredSuccessfully = 'Teacher registered successfully';
   static String noClassesFound = 'No Classes Found';
   static String classAddedSuccessfully = 'Class added successfully';
+  static String classUpdatedSuccessfully = 'Class updated successfully';
 }

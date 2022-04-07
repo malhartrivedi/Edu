@@ -37,7 +37,7 @@ class FirestoreMethods {
     await reference.update(map);
   }
 
-  Future<void> addClasses(String className, UserDataModel userDataModel,
+  Future<void> addClass(String className, UserDataModel userDataModel,
       DocumentReference reference) async {
     String id = _fStore.collection(_classes).doc().id;
     DateTime now = DateTime.now();
@@ -51,6 +51,13 @@ class FirestoreMethods {
     await _fStore.collection(_classes).doc(id).set(model.toJson());
     userDataModel.classes.add(id);
     reference.update(userDataModel.toJson());
+  }
+
+  Future<void> updateClass(
+      String className, ClassModel model, DocumentReference reference) async {
+    model.name = className;
+    model.updatedAt = DateTime.now();
+    reference.update(model.toJson());
   }
 
   CollectionReference<TeacherDataModel> getTeachers() {
