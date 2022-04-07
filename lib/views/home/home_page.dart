@@ -241,8 +241,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _getBottomSheet() {
+  _getBottomSheet(  {ClassModel? model,DocumentReference? updateRef}) {
     final classController = TextEditingController();
+    if (model != null) {
+      classController.text = model.name!;
+    }
     return showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: whiteOff,
@@ -289,7 +292,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       _createClassesTextField(classController),
                       SizedBox(height: 12.h),
-                      _submitButton(classController),
+                      _submitButton(classController, model,updateRef),
                       SizedBox(height: 8.h),
                     ],
                   ),
@@ -345,12 +348,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _submitButton(TextEditingController classController) {
+  _submitButton(TextEditingController classController, [ClassModel? model,DocumentReference? updateRef]) {
     return ElevatedButton(
       onPressed: () {
         if (!formKey.currentState!.validate()) {
           return;
-        } else if (classController.text.isNotEmpty) {
+        } else if (model == null) {
           String className = classController.value.text;
           FirestoreMethods()
               .addClasses(className, _userDataModel!, _reference!);
@@ -360,6 +363,8 @@ class _HomePageState extends State<HomePage> {
             Constants.classAddedSuccessfully,
             backgroundColor: greenLight,
           );
+        }else{
+          _getUpdate(model,updateRef!,classController);
         }
       },
       style: ElevatedButton.styleFrom(
@@ -405,7 +410,6 @@ class _HomePageState extends State<HomePage> {
                 child: MyText(Constants.noClassesFound),
               ),
             );
-
           return ListView.builder(
             scrollDirection: Axis.vertical,
             primary: false,
@@ -414,6 +418,7 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
             itemBuilder: (context, index) {
               ClassModel model = snapshot.data!.docs[index].data();
+              DocumentReference classReference = snapshot.requireData.docs[index].reference;
               return IntrinsicHeight(
                 child: Row(
                   children: [
@@ -441,7 +446,9 @@ class _HomePageState extends State<HomePage> {
                       _getActionIcon(
                         bgColor: blueDarkLight,
                         iconData: Icons.edit_outlined,
-                        onTap: () {},
+                        onTap: () {
+                          _getBottomSheet(model: model, updateRef: classReference);
+                        },
                       ),
                     if (_isEditEnabled)
                       _getActionIcon(
@@ -502,5 +509,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void _getUpdate(ClassModel? model, DocumentReference updateRef, TextEditingController classController) async {
+     model!.updatedAt = DateTime.now();
+     model.name = classController.text;
+     await updateRef.update(model.toJson());
   }
 }

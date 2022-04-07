@@ -252,7 +252,7 @@ class _LoginPageState extends State<LoginPage> {
           decoration: InputDecoration(
             suffixIcon: Icon(
               suffixIcon,
-              color: isValid ? red : grey,
+              color: isValid ? blueDark : grey,
             ),
             contentPadding: EdgeInsets.symmetric(
               vertical: 6.h,

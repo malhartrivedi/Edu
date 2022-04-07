@@ -357,7 +357,7 @@ class _EditProfileState extends State<EditProfile> {
           decoration: InputDecoration(
             suffixIcon: Icon(
               suffixIcon,
-              color: isValid ? red : grey,
+              color: isValid ? blueDark : grey,
             ),
             contentPadding: EdgeInsets.symmetric(
               vertical: 6.h,
