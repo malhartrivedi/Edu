@@ -644,6 +644,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         password: password,
       );
       Navigator.of(context).pop();
+      DateTime now = DateTime.now();
       UserDataModel model = UserDataModel(
         uid: userCred.user!.uid,
         name: name,
@@ -655,6 +656,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
         instituteId: Global.getUniqueCode(),
         school: school,
         post: int.parse(post),
+        classes: <String>[],
+        createdAt: now,
+        updatedAt: now,
       );
 
       await FirestoreMethods().addData(UserType.Admin, model.toJson());

@@ -8,18 +8,18 @@ String parentDataModelToJson(ParentDataModel data) =>
 
 class ParentDataModel {
   ParentDataModel({
-    this.uid,
-    this.name,
-    this.email,
-    this.phone,
-    this.address,
-    this.city,
-    this.state,
-    this.postcode,
-    this.instituteId,
-    this.instituteName,
-    this.createdAt,
-    this.updatedAt,
+    required this.uid,
+    required this.name,
+    required this.email,
+    required this.phone,
+    required this.address,
+    required this.city,
+    required this.state,
+    required this.postcode,
+    required this.instituteId,
+    required this.instituteName,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   String? uid;
@@ -48,7 +48,7 @@ class ParentDataModel {
         instituteId: json["institute_id"] as String,
         instituteName: json["institute_name"] as String,
         createdAt: DateTime.parse(json["created_at"] as String).toLocal(),
-        updatedAt: DateTime.parse(json["updated_at"] as String).toUtc(),
+        updatedAt: DateTime.parse(json["updated_at"] as String).toLocal(),
       );
 
   Map<String, Object?> toJson() => {

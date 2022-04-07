@@ -1,11 +1,15 @@
+import 'package:admin/model/class_model.dart';
 import 'package:admin/model/user_data_model.dart';
 import 'package:admin/service/firestore_methods.dart';
 import 'package:admin/utils/app_asset_path.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_icon.dart';
 import 'package:admin/utils/constants.dart';
+import 'package:admin/utils/global.dart';
 import 'package:admin/views/home/parent/parent_page.dart';
 import 'package:admin/views/home/teacher/teacher_page.dart';
+import 'package:admin/widgets/my_loading.dart';
+import 'package:admin/widgets/my_text.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,15 +27,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final formKey = GlobalKey<FormState>();
-  final classController = TextEditingController();
 
-  String get classes => classController.value.text;
   bool ClassFocus = false;
   bool _isClassValid = false;
   bool _isEditEnabled = false;
   UserDataModel? _userDataModel;
-  DocumentReference? reference;
-
+  DocumentReference? _reference;
 
   Future<void> _getUserData() async {
     final QuerySnapshot<UserDataModel> data =
@@ -39,6 +40,7 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       _userDataModel = data.docs.first.data();
+      _reference = data.docs.first.reference;
     });
   }
 
@@ -114,7 +116,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           SizedBox(height: 12.h),
-          _getClasses(),
+          if (_userDataModel != null) _getClasses(),
         ],
       ),
     );
@@ -124,9 +126,7 @@ class _HomePageState extends State<HomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => TeacherPage(
-          adminData: _userDataModel!
-        ),
+        builder: (context) => TeacherPage(adminData: _userDataModel!),
       ),
     );
   }
@@ -242,6 +242,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _getBottomSheet() {
+    final classController = TextEditingController();
     return showModalBottomSheet(
       isScrollControlled: true,
       backgroundColor: whiteOff,
@@ -286,9 +287,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: Column(
                     children: [
-                      _createClassesTextField(),
+                      _createClassesTextField(classController),
                       SizedBox(height: 12.h),
-                      _submitButton(),
+                      _submitButton(classController),
                       SizedBox(height: 8.h),
                     ],
                   ),
@@ -301,7 +302,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _createClassesTextField() {
+  _createClassesTextField(TextEditingController classController) {
     return _getContainerOutLine(
       hasFocus: ClassFocus == true,
       child: Focus(
@@ -344,13 +345,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _submitButton() {
+  _submitButton(TextEditingController classController) {
     return ElevatedButton(
       onPressed: () {
         if (!formKey.currentState!.validate()) {
           return;
         } else if (classController.text.isNotEmpty) {
-          return Navigator.pop(context);
+          String className = classController.value.text;
+          FirestoreMethods()
+              .addClasses(className, _userDataModel!, _reference!);
+          Navigator.pop(context);
+          Global.showSnackBar(
+            context,
+            Constants.classAddedSuccessfully,
+            backgroundColor: greenLight,
+          );
         }
       },
       style: ElevatedButton.styleFrom(
@@ -377,52 +386,75 @@ class _HomePageState extends State<HomePage> {
   }
 
   _getClassesListView() {
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      primary: false,
-      shrinkWrap: true,
-      itemCount: 3,
-      padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
-      itemBuilder: (context, index) {
-        return IntrinsicHeight(
-          child: Row(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
-                  padding: EdgeInsets.all(6.w),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: blueDarkLight3),
-                      borderRadius: BorderRadius.circular(14.w)),
-                  child: Row(
-                    children: [
-                      _classesNameIcon(),
-                      SizedBox(width: 6.w),
-                      Text(
-                        Constants.classList,
-                        style: ThemeEmailBoldTextStyle,
-                      ),
-                    ],
-                  ),
-                ),
+    return StreamBuilder<QuerySnapshot<ClassModel>>(
+        stream: FirestoreMethods()
+            .getClasses(_userDataModel!.instituteId)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return SizedBox(
+              width: double.infinity,
+              height: 120.h,
+              child: const MyLoading(),
+            );
+          else if (snapshot.data!.docs.length == 0)
+            return SizedBox(
+              width: double.infinity,
+              height: 120.h,
+              child: Center(
+                child: MyText(Constants.noClassesFound),
               ),
-              if (_isEditEnabled)
-                _getActionIcon(
-                  bgColor: blueDarkLight,
-                  iconData: Icons.edit_outlined,
-                  onTap: () {},
+            );
+
+          return ListView.builder(
+            scrollDirection: Axis.vertical,
+            primary: false,
+            shrinkWrap: true,
+            itemCount: snapshot.data!.docs.length,
+            padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
+            itemBuilder: (context, index) {
+              ClassModel model = snapshot.data!.docs[index].data();
+              return IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 4.w, vertical: 4.h),
+                        padding: EdgeInsets.all(6.w),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: blueDarkLight3),
+                            borderRadius: BorderRadius.circular(14.w)),
+                        child: Row(
+                          children: [
+                            _classesNameIcon(model.name!),
+                            SizedBox(width: 6.w),
+                            Text(
+                              model.name!,
+                              style: ThemeEmailBoldTextStyle,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    if (_isEditEnabled)
+                      _getActionIcon(
+                        bgColor: blueDarkLight,
+                        iconData: Icons.edit_outlined,
+                        onTap: () {},
+                      ),
+                    if (_isEditEnabled)
+                      _getActionIcon(
+                        bgColor: red,
+                        iconData: Icons.delete_outline,
+                        onTap: () {},
+                      ),
+                  ],
                 ),
-              if (_isEditEnabled)
-                _getActionIcon(
-                  bgColor: red,
-                  iconData: Icons.delete_outline,
-                  onTap: () {},
-                ),
-            ],
-          ),
-        );
-      },
-    );
+              );
+            },
+          );
+        });
   }
 
   _getActionIcon({
@@ -452,8 +484,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _classesNameIcon() {
-    var Firstname = Constants.classList;
+  _classesNameIcon(String name) {
     return SizedBox(
       height: 36.w,
       width: 36.w,
@@ -465,7 +496,7 @@ class _HomePageState extends State<HomePage> {
         ),
         child: Center(
           child: Text(
-            '${Firstname[0].toUpperCase()}',
+            '${name[0].toUpperCase()}',
             style: iconClassTextStyle,
           ),
         ),

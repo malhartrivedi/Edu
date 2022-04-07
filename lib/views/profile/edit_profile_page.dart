@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EditProfile extends StatefulWidget {
-  EditProfile({Key? key, required this.userModel, required this.reference}) : super(key: key);
+  EditProfile({Key? key, required this.userModel, required this.reference})
+      : super(key: key);
   UserDataModel userModel;
   DocumentReference reference;
 
@@ -500,6 +501,9 @@ class _EditProfileState extends State<EditProfile> {
       instituteId: widget.userModel.instituteId,
       post: int.parse(post),
       school: school,
+      classes: widget.userModel.classes,
+      createdAt: widget.userModel.createdAt,
+      updatedAt: DateTime.now(),
     );
     await widget.reference.update(userDataModel.toJson());
     Navigator.pop(context);

@@ -15,7 +15,6 @@ class Constants {
   static String teacher = 'Teacher';
   static String teacherRegistration = 'Teacher Registration';
   static String classes = 'Classes';
-  static String classList = 'Class 1';
   static String parent = 'Parent';
   static String loading = 'Loading';
   static String parentRegistration = 'Parent Registration';
@@ -83,4 +82,6 @@ class Constants {
   static String timeoutMessage = 'Timeout, Try again later.';
   static String emailAlreadyRegistered = 'Email already registered';
   static String teacherRegisteredSuccessfully = 'Teacher registered successfully';
+  static String noClassesFound = 'No Classes Found';
+  static String classAddedSuccessfully = 'Class added successfully';
 }
