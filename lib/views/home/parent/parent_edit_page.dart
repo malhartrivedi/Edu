@@ -257,7 +257,7 @@ class _ParentEditPageState extends State<ParentEditPage> {
       updatedAt: DateTime.now(),
     );
     await widget.reference?.update(parentDataModel.toJson());
-    Navigator.pop(context);
+    Navigator.pop(context,parentDataModel);
   }
 
   _getContainerOutLine({required Widget child, required bool hasFocus}) {
