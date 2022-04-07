@@ -10,6 +10,9 @@ class UserDataModel {
     required this.state,
     required this.post,
     required this.instituteId,
+    required this.classes,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   UserDataModel.fromJson(Map<String, Object?> json)
@@ -24,6 +27,10 @@ class UserDataModel {
           state: json['state']! as String,
           post: json['post']! as int,
           instituteId: json['institute_id']! as String,
+          classes:
+              List<String>.from((json["classes"]! as Iterable).map((x) => x)),
+          createdAt: DateTime.parse(json["created_at"] as String).toLocal(),
+          updatedAt: DateTime.parse(json["updated_at"] as String).toLocal(),
         );
 
   final String uid;
@@ -36,6 +43,9 @@ class UserDataModel {
   final String state;
   final int post;
   final String instituteId;
+  final List<String> classes;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, Object?> toJson() {
     return {
@@ -49,6 +59,9 @@ class UserDataModel {
       'state': state,
       'post': post,
       'institute_id': instituteId,
+      "classes": List<dynamic>.from(classes.map((x) => x)),
+      "created_at": createdAt!.toUtc().toIso8601String(),
+      "updated_at": updatedAt!.toUtc().toIso8601String(),
     };
   }
 }

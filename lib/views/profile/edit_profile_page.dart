@@ -326,6 +326,9 @@ class _EditProfileState extends State<EditProfile> {
       instituteId: widget.userModel.instituteId,
       post: int.parse(post),
       school: school,
+      classes: widget.userModel.classes,
+      createdAt: widget.userModel.createdAt,
+      updatedAt: DateTime.now(),
     );
     await widget.reference.update(userDataModel.toJson());
     Navigator.pop(context);

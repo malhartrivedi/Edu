@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ParentEditPage extends StatefulWidget {
-  ParentEditPage({Key? key,required this.model,this.reference}) : super(key: key);
+  ParentEditPage({Key? key, required this.model, this.reference})
+      : super(key: key);
   ParentDataModel model;
   DocumentReference? reference;
 
@@ -16,7 +17,6 @@ class ParentEditPage extends StatefulWidget {
 }
 
 class _ParentEditPageState extends State<ParentEditPage> {
-
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -26,6 +26,7 @@ class _ParentEditPageState extends State<ParentEditPage> {
   final _cityController = TextEditingController();
   final _stateController = TextEditingController();
   final _postController = TextEditingController();
+
   String get name => _nameController.value.text;
 
   String get email => _emailController.value.text;
@@ -41,7 +42,6 @@ class _ParentEditPageState extends State<ParentEditPage> {
   String get state => _stateController.value.text;
 
   String get postCode => _postController.value.text;
-
 
   bool _nameFocus = false;
   bool _emailFocus = false;
@@ -72,6 +72,7 @@ class _ParentEditPageState extends State<ParentEditPage> {
     _stateController.text = widget.model.state!;
     _postController.text = widget.model.postcode.toString();
   }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -123,103 +124,103 @@ class _ParentEditPageState extends State<ParentEditPage> {
   Widget get _sizedHeight => SizedBox(height: 16.h);
 
   Widget get _nameTextField => _getTextField(
-    _nameController,
-    label: Constants.name,
-    hasFocus: _nameFocus,
-    isValid: _isNameValid,
-    suffixIcon: Icons.check,
-    validator: nameValidator,
-    onFocusChange: (haveFocus) {
-      setState(() => _nameFocus = haveFocus);
-    },
-  );
+        _nameController,
+        label: Constants.name,
+        hasFocus: _nameFocus,
+        isValid: _isNameValid,
+        suffixIcon: Icons.check,
+        validator: nameValidator,
+        onFocusChange: (haveFocus) {
+          setState(() => _nameFocus = haveFocus);
+        },
+      );
 
   Widget get _emailTextField => _getTextField(
-    _emailController,
-    label: Constants.email,
-    hasFocus: _emailFocus,
-    isValid: _isEmailValid,
-    suffixIcon: Icons.email,
-    textInputType: TextInputType.emailAddress,
-    validator: emailValidator,
-    onFocusChange: (haveFocus) {
-      setState(() => _emailFocus = haveFocus);
-    },
-  );
+        _emailController,
+        label: Constants.email,
+        hasFocus: _emailFocus,
+        isValid: _isEmailValid,
+        suffixIcon: Icons.email,
+        textInputType: TextInputType.emailAddress,
+        validator: emailValidator,
+        onFocusChange: (haveFocus) {
+          setState(() => _emailFocus = haveFocus);
+        },
+      );
 
   Widget get _phoneTextField => _getTextField(
-    _phoneController,
-    label: Constants.phone,
-    hasFocus: _phoneFocus,
-    isValid: _isPhoneValid,
-    suffixIcon: Icons.phone,
-    textInputType: TextInputType.phone,
-    validator: phoneValidator,
-    onFocusChange: (haveFocus) {
-      setState(() => _phoneFocus = haveFocus);
-    },
-  );
+        _phoneController,
+        label: Constants.phone,
+        hasFocus: _phoneFocus,
+        isValid: _isPhoneValid,
+        suffixIcon: Icons.phone,
+        textInputType: TextInputType.phone,
+        validator: phoneValidator,
+        onFocusChange: (haveFocus) {
+          setState(() => _phoneFocus = haveFocus);
+        },
+      );
 
   Widget get _schoolTextField => _getTextField(
-    _instituteNameController,
-    label: Constants.schoolName,
-    hasFocus: _instituteNameFocus,
-    isValid: _isInstituteNameValid,
-    readOnly: true,
-    suffixIcon: Icons.check,
-    onFocusChange: (haveFocus) {
-      setState(() => _instituteNameFocus = haveFocus);
-    },
-  );
+        _instituteNameController,
+        label: Constants.schoolName,
+        hasFocus: _instituteNameFocus,
+        isValid: _isInstituteNameValid,
+        readOnly: true,
+        suffixIcon: Icons.check,
+        onFocusChange: (haveFocus) {
+          setState(() => _instituteNameFocus = haveFocus);
+        },
+      );
 
   Widget get _addressTextField => _getTextField(
-    _addressController,
-    label: Constants.address,
-    hasFocus: _addressFocus,
-    isValid: _isAddressValid,
-    suffixIcon: Icons.home,
-    validator: addressValidator,
-    onFocusChange: (haveFocus) {
-      setState(() => _addressFocus = haveFocus);
-    },
-  );
+        _addressController,
+        label: Constants.address,
+        hasFocus: _addressFocus,
+        isValid: _isAddressValid,
+        suffixIcon: Icons.home,
+        validator: addressValidator,
+        onFocusChange: (haveFocus) {
+          setState(() => _addressFocus = haveFocus);
+        },
+      );
 
   Widget get _cityTextField => _getTextField(
-    _cityController,
-    label: Constants.city,
-    hasFocus: _cityFocus,
-    isValid: _isCityValid,
-    suffixIcon: Icons.check,
-    validator: cityValidator,
-    onFocusChange: (haveFocus) {
-      setState(() => _cityFocus = haveFocus);
-    },
-  );
+        _cityController,
+        label: Constants.city,
+        hasFocus: _cityFocus,
+        isValid: _isCityValid,
+        suffixIcon: Icons.check,
+        validator: cityValidator,
+        onFocusChange: (haveFocus) {
+          setState(() => _cityFocus = haveFocus);
+        },
+      );
 
   Widget get _stateTextField => _getTextField(
-    _stateController,
-    label: Constants.state,
-    hasFocus: _stateFocus,
-    isValid: _isStateValid,
-    suffixIcon: Icons.check,
-    validator: stateValidator,
-    onFocusChange: (haveFocus) {
-      setState(() => _stateFocus = haveFocus);
-    },
-  );
+        _stateController,
+        label: Constants.state,
+        hasFocus: _stateFocus,
+        isValid: _isStateValid,
+        suffixIcon: Icons.check,
+        validator: stateValidator,
+        onFocusChange: (haveFocus) {
+          setState(() => _stateFocus = haveFocus);
+        },
+      );
 
   Widget get _postTextField => _getTextField(
-    _postController,
-    label: Constants.post,
-    textInputType: TextInputType.number,
-    hasFocus: _postFocus,
-    isValid: _isPostValid,
-    suffixIcon: Icons.check,
-    validator: postValidator,
-    onFocusChange: (haveFocus) {
-      setState(() => _postFocus = haveFocus);
-    },
-  );
+        _postController,
+        label: Constants.post,
+        textInputType: TextInputType.number,
+        hasFocus: _postFocus,
+        isValid: _isPostValid,
+        suffixIcon: Icons.check,
+        validator: postValidator,
+        onFocusChange: (haveFocus) {
+          setState(() => _postFocus = haveFocus);
+        },
+      );
 
   _submitButton() {
     return ElevatedButton(
@@ -251,8 +252,8 @@ class _ParentEditPageState extends State<ParentEditPage> {
       city: city,
       state: state,
       postcode: int.parse(postCode),
-      createdAt: widget.model.createdAt,
       instituteId: widget.model.instituteId,
+      createdAt: widget.model.createdAt,
       updatedAt: DateTime.now(),
     );
     await widget.reference?.update(parentDataModel.toJson());
@@ -345,16 +346,16 @@ class _ParentEditPageState extends State<ParentEditPage> {
   }
 
   _getTextField(
-      TextEditingController controller, {
-        required String label,
-        required bool hasFocus,
-        required bool isValid,
-        required IconData suffixIcon,
-        bool readOnly = false,
-        TextInputType? textInputType,
-        FormFieldValidator<String>? validator,
-        ValueChanged<bool>? onFocusChange,
-      }) {
+    TextEditingController controller, {
+    required String label,
+    required bool hasFocus,
+    required bool isValid,
+    required IconData suffixIcon,
+    bool readOnly = false,
+    TextInputType? textInputType,
+    FormFieldValidator<String>? validator,
+    ValueChanged<bool>? onFocusChange,
+  }) {
     return _getContainerOutLine(
       hasFocus: hasFocus,
       child: Focus(
