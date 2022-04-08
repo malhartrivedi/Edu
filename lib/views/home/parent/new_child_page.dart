@@ -4,8 +4,8 @@ import 'package:admin/utils/global.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 enum Gender { Male, Female }
 
@@ -24,11 +24,14 @@ class _NewChildPageState extends State<NewChildPage> {
 
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _dateOfBirthController = TextEditingController();
+  final _dobController = TextEditingController();
+  final _genderController = TextEditingController();
 
   String get name => _nameController.value.text;
 
-  String get dateOfBirth => _dateOfBirthController.value.text;
+  String get dob => _dobController.value.text;
+
+  String get gender => _genderController.value.text;
   bool _nameFocus = false;
   bool _dateFocus = false;
   bool _isNameValid = false;
@@ -75,7 +78,7 @@ class _NewChildPageState extends State<NewChildPage> {
       child: Focus(
         child: TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: _dateOfBirthController,
+          controller: _dobController,
           keyboardType: TextInputType.text,
           style: h2TextStyle,
           decoration: InputDecoration(
@@ -165,7 +168,7 @@ class _NewChildPageState extends State<NewChildPage> {
         _getDate = date;
         DateFormat formatter = DateFormat(Constants.dateFormat);
         _dateFormat = formatter.format(_getDate!);
-        _dateOfBirthController.text = _dateFormat.toString();
+        _dobController.text = _dateFormat.toString();
       });
       return null;
     });

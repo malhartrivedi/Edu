@@ -43,11 +43,14 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Align(
-              alignment: Alignment.topLeft,
-              child: InkWell(
-                  onTap: () => Navigator.pop(context),
-                  child: Icon(Icons.arrow_back))),
+          Padding(
+            padding: EdgeInsets.all(8),
+            child: Align(
+                alignment: Alignment.topLeft,
+                child: InkWell(
+                    onTap: () => Navigator.pop(context),
+                    child: Icon(Icons.arrow_back))),
+          ),
           SizedBox(height: 50.h),
           SizedBox(
             height: 120.w,

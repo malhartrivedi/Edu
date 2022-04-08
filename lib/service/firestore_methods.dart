@@ -1,3 +1,4 @@
+import 'package:admin/model/child_model.dart';
 import 'package:admin/model/class_model.dart';
 import 'package:admin/model/parent_data_model.dart';
 import 'package:admin/model/teacher_data_model.dart';
@@ -14,6 +15,7 @@ class FirestoreMethods {
   final String _parent = 'parent';
   final String _uid = 'uid';
   final String _classes = 'classes';
+  final String _children = 'children';
   final String _instituteId = 'institute_id';
 
   CollectionReference _getUserCollectionRef(UserType userType) {
@@ -50,6 +52,7 @@ class FirestoreMethods {
     );
     await _fStore.collection(_classes).doc(id).set(model.toJson());
     userDataModel.classes.add(id);
+    userDataModel.updatedAt = now;
     reference.update(userDataModel.toJson());
   }
 
@@ -58,6 +61,34 @@ class FirestoreMethods {
     model.name = className;
     model.updatedAt = DateTime.now();
     reference.update(model.toJson());
+  }
+
+  Future<void> addChild(
+      String name,
+      String dob,
+      String gender,
+      ParentDataModel parentDataModel,
+      UserDataModel userDataModel,
+      DocumentReference parentRef,
+      DocumentReference userRef) async {
+    String id = _fStore.collection(_children).doc().id;
+    DateTime now = DateTime.now();
+    ChildModel model = ChildModel(
+        id: id,
+        name: name,
+        dob: dob,
+        gender: gender,
+        instituteId: parentDataModel.instituteId,
+        parentId: parentDataModel.uid,
+        createdAt: now,
+        updatedAt: now);
+    await _fStore.collection(_children).doc(id).set(model.toJson());
+    userDataModel.children.add(id);
+    userDataModel.updatedAt = now;
+    userRef.update(userDataModel.toJson());
+    parentDataModel.children.add(id);
+    parentDataModel.updatedAt = now;
+    parentRef.update(parentDataModel.toJson());
   }
 
   CollectionReference<TeacherDataModel> getTeachers() {
@@ -97,5 +128,14 @@ class FirestoreMethods {
               UserDataModel.fromJson(snapshots.data()!),
           toFirestore: (model, _) => model.toJson(),
         );
+  }
+
+  Query<ParentDataModel> getParentByUID() {
+    return FirebaseFirestore.instance.collection('users').doc('users').collection('parent')
+        .withConverter<ParentDataModel>(
+      fromFirestore: (snapshots, _) =>
+          ParentDataModel.fromJson(snapshots.data()!),
+      toFirestore: (model, _) => model.toJson(),
+    );
   }
 }

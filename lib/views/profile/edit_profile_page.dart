@@ -327,6 +327,7 @@ class _EditProfileState extends State<EditProfile> {
       post: int.parse(post),
       school: school,
       classes: widget.userModel.classes,
+      children: widget.userModel.children,
       createdAt: widget.userModel.createdAt,
       updatedAt: DateTime.now(),
     );

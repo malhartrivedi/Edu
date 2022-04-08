@@ -277,6 +277,7 @@ class _ParentRegistrationPageState extends State<ParentRegistrationPage> {
       city: city,
       state: state,
       postcode: int.parse(post),
+      children: <String>[],
       createdAt: now,
       updatedAt: now,
     );

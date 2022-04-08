@@ -253,6 +253,7 @@ class _ParentEditPageState extends State<ParentEditPage> {
       state: state,
       postcode: int.parse(postCode),
       instituteId: widget.model.instituteId,
+      children: widget.model.children,
       createdAt: widget.model.createdAt,
       updatedAt: DateTime.now(),
     );

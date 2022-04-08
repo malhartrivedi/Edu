@@ -18,6 +18,7 @@ class ParentDataModel {
     required this.postcode,
     required this.instituteId,
     required this.instituteName,
+    required this.children,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -32,6 +33,7 @@ class ParentDataModel {
   int? postcode;
   String? instituteId;
   String? instituteName;
+  List<String> children;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -47,6 +49,8 @@ class ParentDataModel {
         postcode: json["postcode"] as int,
         instituteId: json["institute_id"] as String,
         instituteName: json["institute_name"] as String,
+        children:
+        List<String>.from((json["children"]! as Iterable).map((x) => x)),
         createdAt: DateTime.parse(json["created_at"] as String).toLocal(),
         updatedAt: DateTime.parse(json["updated_at"] as String).toLocal(),
       );
@@ -62,6 +66,7 @@ class ParentDataModel {
     "postcode": postcode,
     "institute_id": instituteId,
     "institute_name": instituteName,
+    "children": List<dynamic>.from(children.map((x) => x)),
     "created_at": createdAt!.toUtc().toIso8601String(),
     "updated_at": updatedAt!.toUtc().toIso8601String(),
   };

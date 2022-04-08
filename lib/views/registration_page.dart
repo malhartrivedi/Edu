@@ -657,6 +657,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         school: school,
         post: int.parse(post),
         classes: <String>[],
+        children: <String>[],
         createdAt: now,
         updatedAt: now,
       );

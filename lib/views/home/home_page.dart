@@ -25,6 +25,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  String? getID;
+
   final formKey = GlobalKey<FormState>();
 
   bool ClassFocus = false;
@@ -42,10 +45,10 @@ class _HomePageState extends State<HomePage> {
         body: SafeArea(
           child: StreamBuilder<QuerySnapshot<UserDataModel>>(
             stream: FirestoreMethods().getAdminByUID(widget.uid).snapshots(),
-            builder: (context, snapshot) {
+              builder: (context, snapshot) {
               if (!snapshot.hasData) return const MyLoading();
               _userDataModel = snapshot.data!.docs.first.data();
-              _reference = snapshot.data!.docs.first.reference;
+                _reference = snapshot.data!.docs.first.reference;
               return _getBody();
             },
           ),
@@ -457,14 +460,54 @@ class _HomePageState extends State<HomePage> {
                       _getActionIcon(
                         bgColor: red,
                         iconData: Icons.delete_outline,
-                        onTap: () {},
+                        onTap: () {
+                          _showDialog(model: model,classReference: classReference);
+                        },
                       ),
                   ],
                 ),
               );
             },
           );
-        });
+        },
+    );
+  }
+
+  _showDialog({ClassModel? model,DocumentReference? classReference}) {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.w)),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(Constants.delete, style: logoutTextStyle),
+            Icon(Icons.clear, color: red, size: 22.sp),
+          ],
+        ),
+        content: Text(Constants.deleteSure, style: sizeTextStyle),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Padding(
+              padding: EdgeInsets.only(left: 50.w),
+              child: Text(Constants.no, style: NoTextStyle),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              String? getId = model?.id;
+              classReference?.delete();
+              _userDataModel!.classes.remove(getId);
+              _reference!.update(_userDataModel!.toJson());
+              Navigator.pop(context);
+            },
+            child: Text(Constants.yes, style: YesTextStyle),
+          )
+        ],
+      ),
+    );
   }
 
   _getActionIcon({
@@ -513,4 +556,5 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
 }
