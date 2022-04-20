@@ -4,7 +4,6 @@ import 'package:admin/service/firestore_methods.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_fonts.dart';
 import 'package:admin/utils/constants.dart';
-import 'package:admin/views/home/parent/parent_detail_page.dart';
 import 'package:admin/views/home/teacher/teacher_detail_page.dart';
 import 'package:admin/views/home/teacher/teacher_registration_page.dart';
 import 'package:admin/widgets/my_loading.dart';
@@ -19,7 +18,6 @@ class TeacherPage extends StatefulWidget {
   TeacherPage({Key? key, required this.adminData}) : super(key: key);
 
   final UserDataModel adminData;
-
 
   @override
   _TeacherPageState createState() => _TeacherPageState();

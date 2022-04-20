@@ -11,6 +11,8 @@ class Constants {
   static String delete = 'DELETE';
   static String addNewB = 'ADD NEW CHILD';
   static String addNew = 'Add New Child';
+  static String updateChild = 'Update Child';
+  static String children = 'Children';
   static String edit = 'Edit';
   static String NameInitial = 'Malhar';
   static String teacherInitial = 'Raju';
@@ -28,6 +30,8 @@ class Constants {
   static String changePassword = 'CHANGE PASSWORD';
   static String changePasswordSmall = 'Change Password';
   static String home = 'Home';
+  static String chat = 'Chat';
+  static String lessons = 'lessons';
   static String profile = 'Profile';
   static String donT = 'Dont have an account?';
   static String register = 'Register';
@@ -94,6 +98,7 @@ class Constants {
   static String emailAlreadyRegistered = 'Email already registered';
   static String teacherRegisteredSuccessfully = 'Teacher registered successfully';
   static String noClassesFound = 'No Classes Found';
+  static String noChildrenFound = 'No Children Found';
   static String classAddedSuccessfully = 'Class added successfully';
   static String classUpdatedSuccessfully = 'Class updated successfully';
 }

@@ -1,3 +1,4 @@
+import 'package:admin/model/child_model.dart';
 import 'package:admin/model/parent_data_model.dart';
 import 'package:admin/model/user_data_model.dart';
 import 'package:admin/service/firestore_methods.dart';
@@ -12,22 +13,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ParentDetailPage extends StatefulWidget {
-  ParentDetailPage({Key? key, required this.model, required this.reference})
+  ParentDetailPage(
+      {Key? key,
+      required this.parentDataModel,
+      required this.parentRef,
+      required this.userDataModel,
+      required this.userModelReference})
       : super(key: key);
-  ParentDataModel model;
-  DocumentReference reference;
+  ParentDataModel parentDataModel;
+  DocumentReference parentRef;
+  UserDataModel userDataModel;
+  final DocumentReference userModelReference;
 
   @override
   _ParentDetailPageState createState() => _ParentDetailPageState();
 }
 
 class _ParentDetailPageState extends State<ParentDetailPage> {
+
   @override
   void initState() {
-    modelData = widget.model;
+    parentDataModel = widget.parentDataModel;
   }
+  ChildModel childModelObject = ChildModel(
+      id: "",
+      name: "",
+      dob: "",
+      gender: "",
+      instituteId: "",
+      parentId: "",
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now());
 
-  late ParentDataModel modelData;
+  late ParentDataModel parentDataModel;
+  bool _isEditEnabled = false;
+  bool _isEditCheck = false;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +81,7 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
               color: greyWhite,
               child: Center(
                 child: Text(
-                  '${modelData.name![0].toUpperCase()}',
+                  '${parentDataModel.name[0].toUpperCase()}',
                   style: ThemeBoldTextStyle,
                 ),
               ),
@@ -70,44 +92,24 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
             ),
           ),
           SizedBox(height: 20.h),
-          Text('${modelData.name}', style: ThemeNameBoldTextStyle),
-          Text('${modelData.email}', style: ThemeEmailBoldTextStyle),
+          Text('${parentDataModel.name}', style: ThemeNameBoldTextStyle),
+          Text('${parentDataModel.email}', style: ThemeEmailBoldTextStyle),
           SizedBox(height: 32.h),
           _getDivider(),
-          _getDetailItem(Constants.phoneB, '+91-${modelData.phone}'),
+          _getDetailItem(Constants.phoneB, '+91-${parentDataModel.phone}'),
           _getDivider(),
-          _getDetailItem(Constants.schoolB, '${modelData.instituteName}'),
+          _getDetailItem(Constants.schoolB, '${parentDataModel.instituteName}'),
           _getDivider(),
-          _getDetailItem(Constants.addressB, '${modelData.address}'),
+          _getDetailItem(Constants.addressB, '${parentDataModel.address}'),
           _getDivider(),
-          _getDetailItem(Constants.cityB, '${modelData.city}'),
+          _getDetailItem(Constants.cityB, '${parentDataModel.city}'),
           _getDivider(),
-          _getDetailItem(Constants.stateB, '${modelData.state}'),
+          _getDetailItem(Constants.stateB, '${parentDataModel.state}'),
           _getDivider(),
-          _getDetailItem(Constants.postB, '${modelData.postcode}'),
+          _getDetailItem(Constants.postB, '${parentDataModel.postcode}'),
           _getDivider(),
           SizedBox(height: 20.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => NewChildPage())),
-                style: ElevatedButton.styleFrom(
-                  elevation: 6.0,
-                  primary: greyGreenDarkLight,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Text(
-                  Constants.addNewB,
-                  style: sizeWhiteTextStyle,
-                ),
-              ),
-            ),
-          ),
+          _addNewChild(),
           SizedBox(height: 10.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -122,12 +124,13 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ParentEditPage(
-                              model: modelData, reference: widget.reference),
+                              model: parentDataModel,
+                              reference: widget.parentRef),
                         ),
                       );
                       if (value != null) {
                         setState(() {
-                          modelData = value;
+                          parentDataModel = value;
                         });
                       }
                     },
@@ -219,12 +222,305 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
           ),
           TextButton(
             onPressed: () {
-              widget.reference.delete();
+              widget.parentRef.delete();
               Navigator.pop(context);
             },
             child: Text(Constants.yes, style: YesTextStyle),
           )
         ],
+      ),
+    );
+  }
+
+  _addNewChild() {
+    return StreamBuilder<QuerySnapshot<ChildModel>>(
+        stream:
+            FirestoreMethods().getChild(widget.parentDataModel.uid).snapshots(),
+        builder: (context, snapshot) {
+          var snapShotObj = snapshot.data;
+          if (snapShotObj != null) {
+            var childModelObj = snapShotObj.size > 0 ? snapShotObj.docs.first.data() : childModelObject;
+            var childRefObj = snapShotObj.size > 0 ? snapShotObj.docs.first.reference : null;
+            if (snapShotObj.size == 0) {
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _isEditCheck = false;
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NewChildPage(
+                                    parentDataModel: widget.parentDataModel,
+                                    parentRef: widget.parentRef,
+                                    userDataModel: widget.userDataModel,
+                                    userModelReference: widget.userModelReference,
+                                    childModel:  childModelObj,
+                                    childRef:  childRefObj,
+                                    isEditCheck: _isEditCheck,
+                                  )));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 6.0,
+                      primary: greyGreenDarkLight,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      Constants.addNewB,
+                      style: sizeWhiteTextStyle,
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              childModelObj = snapShotObj.docs.first.data();
+            }
+          }
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Card(
+              elevation: 6,
+              color: whiteOff,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.w),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: greyWhite,
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(12.w)),
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(width: 12.w),
+                        Text(Constants.children, style: blueDark20BoldTS),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            _isEditCheck = false;
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NewChildPage(
+                                      parentDataModel: widget.parentDataModel,
+                                      parentRef: widget.parentRef,
+                                      userDataModel: widget.userDataModel,
+                                      userModelReference:
+                                      widget.userModelReference,
+                                      childRef: snapShotObj!.docs.first.reference,
+                                      childModel: snapShotObj.docs.first.data(),
+                                      isEditCheck: _isEditCheck,
+                                    )));
+
+                          },
+                          borderRadius: BorderRadius.circular(50),
+                          child: Padding(
+                            padding: EdgeInsets.all(8.w),
+                            child: Icon(
+                              icAdd,
+                              size: 24.sp,
+                              color: blueDarkLight2,
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            setState(() => _isEditEnabled = !_isEditEnabled);
+                          },
+                          borderRadius: BorderRadius.circular(50),
+                          child: Padding(
+                            padding: EdgeInsets.all(8.w),
+                            child: Icon(
+                              _isEditEnabled
+                                  ? Icons.clear
+                                  : Icons.edit_outlined,
+                              size: 24.sp,
+                              color: blueDarkLight2,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 4.w),
+                      ],
+                    ),
+                  ),
+                  _getClassesListView(),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  _getClassesListView() {
+    return StreamBuilder<QuerySnapshot<ChildModel>>(
+        stream:
+            FirestoreMethods().getChild(widget.parentDataModel.uid).snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return LinearProgressIndicator();
+          }
+          int itemCount = snapshot.data!.docs.length;
+          return ListView.builder(
+            scrollDirection: Axis.vertical,
+            primary: false,
+            shrinkWrap: true,
+            itemCount: itemCount,
+            padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
+            itemBuilder: (context, index) {
+              DocumentReference childRef = snapshot.data!.docs[index].reference;
+              ChildModel childModel = snapshot.data!.docs[index].data();
+              return IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 4.w, vertical: 4.h),
+                        padding: EdgeInsets.all(6.w),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: blueDarkLight3),
+                            borderRadius: BorderRadius.circular(14.w)),
+                        child: Row(
+                          children: [
+                            _classesNameIcon(childModel.name),
+                            SizedBox(width: 6.w),
+                            Text(
+                              childModel.name,
+                              style: ThemeEmailBoldTextStyle,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    if (_isEditEnabled)
+                      _getActionIcon(
+                        bgColor: blueDarkLight,
+                        iconData: Icons.edit_outlined,
+                        onTap: () {
+                          _isEditCheck = true;
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewChildPage(
+                                        parentDataModel: parentDataModel,
+                                        parentRef: widget.parentRef,
+                                        userDataModel: widget.userDataModel,
+                                        userModelReference:
+                                            widget.userModelReference,
+                                        childModel: childModel,
+                                        childRef: childRef,
+                                    isEditCheck: _isEditCheck,
+                                      )));
+                          _isEditEnabled = !_isEditEnabled;
+                        },
+                      ),
+                    if (_isEditEnabled)
+                      _getActionIcon(
+                        bgColor: red,
+                        iconData: Icons.delete_outline,
+                        onTap: () {
+                          _showDialogChildren(
+                              childDataModel: childModel, childRef: childRef);
+                          _isEditEnabled = !_isEditEnabled;
+                        },
+                      ),
+                  ],
+                ),
+              );
+            },
+          );
+        });
+  }
+
+  _showDialogChildren(
+      {ChildModel? childDataModel, DocumentReference? childRef}) {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.w)),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(Constants.delete, style: logoutTextStyle),
+            Icon(Icons.clear, color: red, size: 22.sp),
+          ],
+        ),
+        content: Text(Constants.deleteSure, style: sizeTextStyle),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Padding(
+              padding: EdgeInsets.only(left: 50.w),
+              child: Text(Constants.no, style: NoTextStyle),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              String? getId = childDataModel?.id;
+              childRef?.delete();
+              widget.userDataModel.children.remove(getId);
+              widget.parentDataModel.children.remove(getId);
+              widget.userModelReference.update(widget.userDataModel.toJson());
+              widget.parentRef.update(widget.parentDataModel.toJson());
+              Navigator.pop(context);
+            },
+            child: Text(Constants.yes, style: YesTextStyle),
+          )
+        ],
+      ),
+    );
+  }
+
+  _getActionIcon({
+    required Color bgColor,
+    required IconData iconData,
+    GestureTapCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14.w),
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Container(
+          height: double.infinity,
+          margin: EdgeInsets.all(4.w),
+          padding: EdgeInsets.all(12.w),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(14.w),
+          ),
+          child: Icon(
+            iconData,
+            color: white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  _classesNameIcon(String name) {
+    return SizedBox(
+      height: 36.w,
+      width: 36.w,
+      child: Card(
+        color: blueDarkLight2,
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.w),
+        ),
+        child: Center(
+          child: Text(
+            '${name[0].toUpperCase()}',
+            style: iconClassTextStyle,
+          ),
+        ),
       ),
     );
   }

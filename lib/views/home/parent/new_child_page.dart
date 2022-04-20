@@ -1,41 +1,73 @@
+import 'package:admin/model/parent_data_model.dart';
+import 'package:admin/model/user_data_model.dart';
+import 'package:admin/service/firestore_methods.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/constants.dart';
 import 'package:admin/utils/global.dart';
 import 'package:admin/widgets/my_textstyle.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
+import '../../../model/child_model.dart';
+
 enum Gender { Male, Female }
 
 class NewChildPage extends StatefulWidget {
-  const NewChildPage({Key? key}) : super(key: key);
+  NewChildPage(
+      {Key? key,
+      required this.parentDataModel,
+      required this.parentRef,
+      required this.userDataModel,
+      required this.userModelReference,
+      required this.childModel,
+      this.childRef,
+      required this.isEditCheck})
+      : super(key: key);
+  final ParentDataModel parentDataModel;
+  final DocumentReference parentRef;
+  final UserDataModel userDataModel;
+  final DocumentReference userModelReference;
+  ChildModel childModel;
+  DocumentReference? childRef;
+  bool isEditCheck;
 
   @override
   _NewChildPageState createState() => _NewChildPageState();
 }
 
 class _NewChildPageState extends State<NewChildPage> {
-  int radioValue = -1;
+  String radioValue = '';
+
   DateTime? _newDatePicker;
   DateTime? _getDate;
   String? _dateFormat;
-
   final _formKey = GlobalKey<FormState>();
+
   final _nameController = TextEditingController();
   final _dobController = TextEditingController();
-  final _genderController = TextEditingController();
 
   String get name => _nameController.value.text;
 
   String get dob => _dobController.value.text;
 
-  String get gender => _genderController.value.text;
   bool _nameFocus = false;
+
   bool _dateFocus = false;
   bool _isNameValid = false;
   bool _isDateValid = false;
+
+  @override
+  void initState() {
+    print(widget.isEditCheck);
+    if (widget.isEditCheck == true) {
+      _nameController.text = widget.childModel.name;
+      _dobController.text = widget.childModel.dob;
+      radioValue = widget.childModel.gender;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +75,16 @@ class _NewChildPageState extends State<NewChildPage> {
       key: _formKey,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            Constants.addNew,
+          title: Text(widget.isEditCheck?
+            Constants.updateChild : Constants.addNew,
             style: ExtraBoldTextStyle,
           ),
           backgroundColor: blueDarkLight2,
         ),
         backgroundColor: bgColor,
-        body: _getBody(),
+        body: SafeArea(
+          child: _getBody(),
+        ),
       ),
     );
   }
@@ -66,7 +100,7 @@ class _NewChildPageState extends State<NewChildPage> {
           _sizedHeight,
           _genderTextField,
           _sizedHeight,
-          _submitButton(),
+          _submitButton(widget.childModel),
         ],
       ),
     );
@@ -127,10 +161,10 @@ class _NewChildPageState extends State<NewChildPage> {
         Row(
           children: [
             Expanded(
-              child: RadioListTile<int>(
+              child: RadioListTile<String>(
                   title: Text(Constants.male),
                   activeColor: greyGreenDark,
-                  value: 1,
+                  value: 'Male',
                   groupValue: radioValue,
                   onChanged: (value) {
                     setState(() {
@@ -139,10 +173,10 @@ class _NewChildPageState extends State<NewChildPage> {
                   }),
             ),
             Expanded(
-              child: RadioListTile<int>(
+              child: RadioListTile<String>(
                   title: Text(Constants.female),
                   activeColor: greyGreenDark,
-                  value: 2,
+                  value: 'Female',
                   groupValue: radioValue,
                   onChanged: (value1) {
                     setState(() {
@@ -199,14 +233,26 @@ class _NewChildPageState extends State<NewChildPage> {
     return null;
   }
 
-  _submitButton() {
+  _submitButton(ChildModel? childModel) {
     return ElevatedButton(
       onPressed: () {
         if (!_formKey.currentState!.validate()) {
           return;
-        } else if (radioValue < 0) {
+        } else if (radioValue.isEmpty) {
           Global.showSnackBar(context, Constants.selectGender);
+        }
+        if (widget.isEditCheck == false) {
+          FirestoreMethods().addChild(
+              name,
+              dob,
+              radioValue.toString(),
+              widget.parentDataModel,
+              widget.userDataModel,
+              widget.parentRef,
+              widget.userModelReference);
+          Navigator.pop(context);
         } else {
+          _editChild();
           Navigator.pop(context);
         }
       },
@@ -274,5 +320,19 @@ class _NewChildPageState extends State<NewChildPage> {
       ),
       child: child,
     );
+  }
+
+  _editChild() async {
+    ChildModel childModel = ChildModel(
+      id: widget.childModel.id,
+      name: name,
+      dob: dob,
+      gender: radioValue,
+      instituteId: widget.childModel.instituteId,
+      parentId: widget.childModel.parentId,
+      createdAt: widget.childModel.createdAt,
+      updatedAt: DateTime.now(),
+    );
+    await widget.childRef!.update(childModel.toJson());
   }
 }

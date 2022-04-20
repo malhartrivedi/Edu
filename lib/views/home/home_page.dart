@@ -6,6 +6,7 @@ import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_icon.dart';
 import 'package:admin/utils/constants.dart';
 import 'package:admin/utils/global.dart';
+import 'package:admin/views/home/classes_detail_page.dart';
 import 'package:admin/views/home/parent/parent_page.dart';
 import 'package:admin/views/home/teacher/teacher_page.dart';
 import 'package:admin/widgets/my_loading.dart';
@@ -25,8 +26,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  String? getID;
 
   final formKey = GlobalKey<FormState>();
 
@@ -48,7 +47,7 @@ class _HomePageState extends State<HomePage> {
               builder: (context, snapshot) {
               if (!snapshot.hasData) return const MyLoading();
               _userDataModel = snapshot.data!.docs.first.data();
-                _reference = snapshot.data!.docs.first.reference;
+              _reference = snapshot.data!.docs.first.reference;
               return _getBody();
             },
           ),
@@ -131,7 +130,7 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(
         builder: (context) => ParentPage(
-          adminDataParent: _userDataModel!,
+          adminDataParent: _userDataModel!, userModelReference: _reference!,
         ),
       ),
     );
@@ -426,22 +425,25 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: Container(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 4.w, vertical: 4.h),
-                        padding: EdgeInsets.all(6.w),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: blueDarkLight3),
-                            borderRadius: BorderRadius.circular(14.w)),
-                        child: Row(
-                          children: [
-                            _classesNameIcon(model.name!),
-                            SizedBox(width: 6.w),
-                            Text(
-                              model.name!,
-                              style: ThemeEmailBoldTextStyle,
-                            ),
-                          ],
+                      child: InkWell(
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> ClassesDetailPage(classModel: model,classRef: classReference,))),
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 4.w, vertical: 4.h),
+                          padding: EdgeInsets.all(6.w),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: blueDarkLight3),
+                              borderRadius: BorderRadius.circular(14.w)),
+                          child: Row(
+                            children: [
+                              _classesNameIcon(model.name!),
+                              SizedBox(width: 6.w),
+                              Text(
+                                model.name!,
+                                style: ThemeEmailBoldTextStyle,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

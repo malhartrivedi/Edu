@@ -1,5 +1,4 @@
 import 'package:admin/model/parent_data_model.dart';
-import 'package:admin/model/teacher_data_model.dart';
 import 'package:admin/model/user_data_model.dart';
 import 'package:admin/service/firestore_methods.dart';
 import 'package:admin/utils/app_color.dart';
@@ -7,7 +6,6 @@ import 'package:admin/utils/app_fonts.dart';
 import 'package:admin/utils/constants.dart';
 import 'package:admin/views/home/parent/parent_detail_page.dart';
 import 'package:admin/views/home/parent/parent_registration_page.dart';
-import 'package:admin/views/home/teacher/teacher_registration_page.dart';
 import 'package:admin/widgets/my_loading.dart';
 import 'package:admin/widgets/my_text.dart';
 import 'package:admin/widgets/my_textstyle.dart';
@@ -16,9 +14,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ParentPage extends StatefulWidget {
-  const ParentPage({Key? key, required this.adminDataParent}) : super(key: key);
+  const ParentPage({Key? key, required this.adminDataParent, required this.userModelReference}) : super(key: key);
 
   final UserDataModel adminDataParent;
+  final DocumentReference userModelReference;
 
   @override
   _ParentPageState createState() => _ParentPageState();
@@ -89,7 +88,13 @@ class _ParentPageState extends State<ParentPage> {
             DocumentReference reference = snapshot.data!.docs[index].reference;
             return InkWell(
               onTap: () => Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ParentDetailPage(model: model, reference: reference,))),
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ParentDetailPage(
+                            parentDataModel: model,
+                            parentRef: reference,
+                            userDataModel: widget.adminDataParent, userModelReference: widget.userModelReference,
+                          ))),
               child: Container(
                 margin: EdgeInsets.symmetric(
                   horizontal: 8.w,
@@ -108,13 +113,13 @@ class _ParentPageState extends State<ParentPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           MyText(
-                            model.name!,
+                            model.name,
                             fontSize: 14.sp,
                             fontWeight: fwSemiBold,
                           ),
                           SizedBox(height: 2.h),
                           MyText(
-                            model.email!,
+                            model.email,
                             color: greyGreenDark,
                           ),
                         ],
@@ -123,10 +128,10 @@ class _ParentPageState extends State<ParentPage> {
                     Padding(
                       padding: EdgeInsets.all(8.w),
                       child: Icon(
-                        model.uid!.isEmpty
+                        model.uid.isEmpty
                             ? Icons.error_outline
                             : Icons.check_circle_outline,
-                        color: model.uid!.isEmpty ? red90 : greenLight,
+                        color: model.uid.isEmpty ? red90 : greenLight,
                         size: 32.sp,
                       ),
                     ),
@@ -152,7 +157,7 @@ class _ParentPageState extends State<ParentPage> {
         ),
         child: Center(
           child: MyText(
-            '${model.name![0].toUpperCase()}',
+            '${model.name[0].toUpperCase()}',
             color: whiteOff,
             fontSize: 20.sp,
             fontWeight: fwBold,

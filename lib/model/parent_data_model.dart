@@ -23,16 +23,16 @@ class ParentDataModel {
     required this.updatedAt,
   });
 
-  String? uid;
-  String? name;
-  String? email;
+  String uid;
+  String name;
+  String email;
   int? phone;
-  String? address;
-  String? city;
-  String? state;
+  String address;
+  String city;
+  String state;
   int? postcode;
-  String? instituteId;
-  String? instituteName;
+  String instituteId;
+  String instituteName;
   List<String> children;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -50,7 +50,7 @@ class ParentDataModel {
         instituteId: json["institute_id"] as String,
         instituteName: json["institute_name"] as String,
         children:
-        List<String>.from((json["children"]! as Iterable).map((x) => x)),
+        List<String>.from((json["children"] as Iterable).map((x) => x)),
         createdAt: DateTime.parse(json["created_at"] as String).toLocal(),
         updatedAt: DateTime.parse(json["updated_at"] as String).toLocal(),
       );

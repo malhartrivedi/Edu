@@ -16,24 +16,24 @@ class ChildModel {
     required this.updatedAt,
   });
 
-  String? id;
-  String? name;
-  String? dob;
-  String? gender;
-  String? instituteId;
-  String? parentId;
+  String id;
+  String name;
+  String dob;
+  String gender;
+  String instituteId;
+  String parentId;
   DateTime? createdAt;
   DateTime? updatedAt;
 
   factory ChildModel.fromJson(Map<String, Object?> json) => ChildModel(
-    name: json["name"] as String,
-    dob: json["dob"] as String,
-    gender: json["gender"] as String,
-    instituteId: json["institute_id"] as String,
-    parentId: json["parent_id"] as String,
-    id: json["id"] as String,
-    createdAt: DateTime.parse(json["created_at"] as String).toLocal(),
-    updatedAt: DateTime.parse(json["updated_at"] as String).toLocal(),
+    name: json["name"]! as String,
+    dob: json["dob"]! as String,
+    gender: json["gender"]! as String,
+    instituteId: json["institute_id"]! as String,
+    parentId: json["parent_id"]! as String,
+    id: json["id"]! as String,
+    createdAt: DateTime.parse(json["createdAt"] as String).toLocal(),
+    updatedAt: DateTime.parse(json["updatedAt"] as String).toLocal(),
   );
 
   Map<String, Object?> toJson() => {

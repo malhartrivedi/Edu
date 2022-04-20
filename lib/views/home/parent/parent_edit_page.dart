@@ -63,13 +63,13 @@ class _ParentEditPageState extends State<ParentEditPage> {
 
   @override
   void initState() {
-    _nameController.text = widget.model.name!;
-    _emailController.text = widget.model.email!;
+    _nameController.text = widget.model.name;
+    _emailController.text = widget.model.email;
     _phoneController.text = widget.model.phone.toString();
-    _instituteNameController.text = widget.model.instituteName!;
-    _addressController.text = widget.model.address!;
-    _cityController.text = widget.model.city!;
-    _stateController.text = widget.model.state!;
+    _instituteNameController.text = widget.model.instituteName;
+    _addressController.text = widget.model.address;
+    _cityController.text = widget.model.city;
+    _stateController.text = widget.model.state;
     _postController.text = widget.model.postcode.toString();
   }
 

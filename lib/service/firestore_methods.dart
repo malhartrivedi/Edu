@@ -17,6 +17,7 @@ class FirestoreMethods {
   final String _classes = 'classes';
   final String _children = 'children';
   final String _instituteId = 'institute_id';
+  final String _parentId = 'parent_id';
 
   CollectionReference _getUserCollectionRef(UserType userType) {
     String? type;
@@ -111,6 +112,27 @@ class FirestoreMethods {
         );
   }
 
+  Query<ClassModel> getClassess() {
+    return _fStore
+    .collection(_classes)
+        .withConverter<ClassModel>(
+      fromFirestore: (snapshots, _) =>
+          ClassModel.fromJson(snapshots.data()!),
+      toFirestore: (ClassModel, _) => ClassModel.toJson(),
+    );
+  }
+
+  Query<ChildModel> getChild(String uid) {
+    return _fStore
+        .collection(_children)
+        .where(_parentId, isEqualTo: uid)
+        .withConverter<ChildModel>(
+      fromFirestore: (snapshots, _) =>
+          ChildModel.fromJson(snapshots.data()!),
+      toFirestore: (model, _) => model.toJson(),
+    );
+  }
+
   CollectionReference<ParentDataModel> getParents() {
     return _getUserCollectionRef(UserType.Parent)
         .withConverter<ParentDataModel>(
@@ -128,14 +150,5 @@ class FirestoreMethods {
               UserDataModel.fromJson(snapshots.data()!),
           toFirestore: (model, _) => model.toJson(),
         );
-  }
-
-  Query<ParentDataModel> getParentByUID() {
-    return FirebaseFirestore.instance.collection('users').doc('users').collection('parent')
-        .withConverter<ParentDataModel>(
-      fromFirestore: (snapshots, _) =>
-          ParentDataModel.fromJson(snapshots.data()!),
-      toFirestore: (model, _) => model.toJson(),
-    );
   }
 }
