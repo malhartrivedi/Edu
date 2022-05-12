@@ -12,6 +12,7 @@ class ChildModel {
     required this.gender,
     required this.instituteId,
     required this.parentId,
+    required this.classes,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -22,6 +23,7 @@ class ChildModel {
   String gender;
   String instituteId;
   String parentId;
+  List<String> classes;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -32,6 +34,7 @@ class ChildModel {
     instituteId: json["institute_id"]! as String,
     parentId: json["parent_id"]! as String,
     id: json["id"]! as String,
+    classes: List<String>.from((json["classes"]! as Iterable).map((x) => x)),
     createdAt: DateTime.parse(json["createdAt"] as String).toLocal(),
     updatedAt: DateTime.parse(json["updatedAt"] as String).toLocal(),
   );
@@ -43,6 +46,7 @@ class ChildModel {
     "institute_id": instituteId,
     "parent_id": parentId,
     "id": id,
+    "classes": List<dynamic>.from(classes.map((x) => x)),
     "createdAt": createdAt!.toUtc().toIso8601String(),
     "updatedAt": updatedAt!.toUtc().toIso8601String(),
   };

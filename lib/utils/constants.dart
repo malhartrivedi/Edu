@@ -14,6 +14,7 @@ class Constants {
   static String updateChild = 'Update Child';
   static String children = 'Children';
   static String edit = 'Edit';
+  static String editB = 'EDIT';
   static String NameInitial = 'Malhar';
   static String teacherInitial = 'Raju';
   static String teacher = 'Teacher';
@@ -58,6 +59,7 @@ class Constants {
   static String address = 'Address';
   static String addressB = 'ADDRESS';
   static String add = 'Add';
+  static String addB = 'ADD';
   static String city = 'City';
   static String cityB = 'CITY';
   static String state = 'State';
@@ -99,6 +101,13 @@ class Constants {
   static String teacherRegisteredSuccessfully = 'Teacher registered successfully';
   static String noClassesFound = 'No Classes Found';
   static String noChildrenFound = 'No Children Found';
+  static String noChildrenSelected = 'No Children Selected';
   static String classAddedSuccessfully = 'Class added successfully';
   static String classUpdatedSuccessfully = 'Class updated successfully';
+  static String noTeacherAssigned = 'No Teacher Assigned';
+  static String noChildAdd = 'No child Add';
+  static String assignTeacher = 'Assign Teacher';
+  static String assignChild = 'Assign Child';
+  static String childrenUpdatedSuccessfully = 'Children Updated Successfully';
+  static String pleaseSelectTeacher = 'Please select Teacher';
 }

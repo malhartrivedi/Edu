@@ -61,7 +61,6 @@ class _NewChildPageState extends State<NewChildPage> {
 
   @override
   void initState() {
-    print(widget.isEditCheck);
     if (widget.isEditCheck == true) {
       _nameController.text = widget.childModel.name;
       _dobController.text = widget.childModel.dob;
@@ -330,6 +329,7 @@ class _NewChildPageState extends State<NewChildPage> {
       gender: radioValue,
       instituteId: widget.childModel.instituteId,
       parentId: widget.childModel.parentId,
+      classes: widget.childModel.classes,
       createdAt: widget.childModel.createdAt,
       updatedAt: DateTime.now(),
     );

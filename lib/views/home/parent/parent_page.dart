@@ -74,7 +74,7 @@ class _ParentPageState extends State<ParentPage> {
 
   _getBody() {
     return StreamBuilder<QuerySnapshot<ParentDataModel>>(
-      stream: FirestoreMethods().getParents().snapshots(),
+      stream: FirestoreMethods().getParents(widget.adminDataParent.instituteId).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const MyLoading();
         return ListView.builder(

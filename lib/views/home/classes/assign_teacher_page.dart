@@ -1,29 +1,39 @@
+import 'package:admin/model/class_model.dart';
 import 'package:admin/model/teacher_data_model.dart';
-import 'package:admin/model/user_data_model.dart';
 import 'package:admin/service/firestore_methods.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_fonts.dart';
 import 'package:admin/utils/constants.dart';
-import 'package:admin/views/home/teacher/teacher_detail_page.dart';
-import 'package:admin/views/home/teacher/teacher_registration_page.dart';
+import 'package:admin/utils/global.dart';
 import 'package:admin/widgets/my_loading.dart';
 import 'package:admin/widgets/my_text.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class TeacherPage extends StatefulWidget {
-  TeacherPage({Key? key, required this.adminData}) : super(key: key);
+class AssignTeacherPage extends StatefulWidget {
+  AssignTeacherPage(this.classModel, this.classRef, {Key? key}) : super(key: key);
 
-  final UserDataModel adminData;
+  ClassModel classModel;
+  DocumentReference classRef;
 
   @override
-  _TeacherPageState createState() => _TeacherPageState();
+  _AssignTeacherPageState createState() => _AssignTeacherPageState();
 }
 
-class _TeacherPageState extends State<TeacherPage> {
+class _AssignTeacherPageState extends State<AssignTeacherPage> {
+
+  String teacherId = '';
+
+  @override
+  void initState() {
+    setState(() {
+      teacherId = widget.classModel.teacherId!;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,20 +48,20 @@ class _TeacherPageState extends State<TeacherPage> {
       backgroundColor: blueDarkLight2,
       centerTitle: false,
       title: Text(
-        Constants.teacher,
+        Constants.assignTeacher,
         style: ExtraBoldTextStyle,
       ),
       actions: [
         InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => TeacherRegistrationPage(
-                  adminData: widget.adminData,
-                ),
-              ),
-            );
+          onTap: () async {
+            if(teacherId.isEmpty){
+              Global.showSnackBar(context, Constants.pleaseSelectTeacher);
+            }
+            await widget.classRef.update({'teacher_id':teacherId});
+            ClassModel cModel = widget.classModel;
+            cModel.teacherId = teacherId;
+            Global.showSnackBar(context, 'Teacher Updated',backgroundColor: green);
+            Navigator.pop(context,cModel);
           },
           borderRadius: BorderRadius.circular(8.w),
           child: Container(
@@ -63,7 +73,7 @@ class _TeacherPageState extends State<TeacherPage> {
             margin: EdgeInsets.all(8.w),
             padding: EdgeInsets.symmetric(horizontal: 14.w),
             child: Text(
-              Constants.add.toUpperCase(),
+              Constants.submit.toUpperCase(),
               style: h2TextStyle,
             ),
           ),
@@ -74,7 +84,7 @@ class _TeacherPageState extends State<TeacherPage> {
 
   _getBody() {
     return StreamBuilder<QuerySnapshot<TeacherDataModel>>(
-      stream: FirestoreMethods().getTeachersInstituteId(widget.adminData.instituteId).snapshots(),
+      stream: FirestoreMethods().getTeachersInstituteId(widget.classModel.instituteId).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const MyLoading();
         return ListView.builder(
@@ -87,8 +97,11 @@ class _TeacherPageState extends State<TeacherPage> {
             TeacherDataModel model = snapshot.data!.docs[index].data();
             DocumentReference reference = snapshot.data!.docs[index].reference;
             return InkWell(
-              onTap: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => TeacherDetailPage(model: model, reference: reference,)),),
+              onTap: () {
+                setState(() {
+                  teacherId = model.uid!;
+                });
+              },
               child: Container(
                 margin: EdgeInsets.symmetric(
                   horizontal: 8.w,
@@ -119,13 +132,11 @@ class _TeacherPageState extends State<TeacherPage> {
                         ],
                       ),
                     ),
+                    if(model.uid == teacherId)
                     Padding(
                       padding: EdgeInsets.all(8.w),
-                      child: Icon(
-                        model.uid!.isEmpty
-                            ? Icons.error_outline
-                            : Icons.check_circle_outline,
-                        color: model.uid!.isEmpty ? red90 : greenLight,
+                      child: Icon(Icons.check_circle_outline,
+                        color:  greenLight,
                         size: 32.sp,
                       ),
                     ),

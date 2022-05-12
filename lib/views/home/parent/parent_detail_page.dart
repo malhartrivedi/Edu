@@ -42,6 +42,7 @@ class _ParentDetailPageState extends State<ParentDetailPage> {
       gender: "",
       instituteId: "",
       parentId: "",
+      classes: <String>[],
       createdAt: DateTime.now(),
       updatedAt: DateTime.now());
 

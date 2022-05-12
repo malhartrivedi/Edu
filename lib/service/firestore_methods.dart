@@ -14,6 +14,7 @@ class FirestoreMethods {
   final String _teacher = 'teacher';
   final String _parent = 'parent';
   final String _uid = 'uid';
+  final String _id = 'id';
   final String _classes = 'classes';
   final String _children = 'children';
   final String _instituteId = 'institute_id';
@@ -48,6 +49,8 @@ class FirestoreMethods {
       id: id,
       name: className,
       instituteId: userDataModel.instituteId,
+      teacherId: '',
+      children: <String>[],
       createdAt: now,
       updatedAt: now,
     );
@@ -81,8 +84,9 @@ class FirestoreMethods {
         gender: gender,
         instituteId: parentDataModel.instituteId,
         parentId: parentDataModel.uid,
+        classes: <String>[],
         createdAt: now,
-        updatedAt: now);
+        updatedAt: now,);
     await _fStore.collection(_children).doc(id).set(model.toJson());
     userDataModel.children.add(id);
     userDataModel.updatedAt = now;
@@ -92,11 +96,42 @@ class FirestoreMethods {
     parentRef.update(parentDataModel.toJson());
   }
 
-  CollectionReference<TeacherDataModel> getTeachers() {
+  Query<TeacherDataModel> getTeachersInstituteId(String? instituteId) {
     return _getUserCollectionRef(UserType.Teacher)
+        .where(_instituteId, isEqualTo: instituteId)
         .withConverter<TeacherDataModel>(
       fromFirestore: (snapshots, _) =>
           TeacherDataModel.fromJson(snapshots.data()!),
+      toFirestore: (model, _) => model.toJson(),
+    );
+  }
+
+  Query<ChildModel> getChildInstituteId(String? instituteId) {
+    return _fStore.collection(_children)
+        .where(_instituteId, isEqualTo: instituteId)
+        .withConverter<ChildModel>(
+      fromFirestore: (snapshots, _) =>
+          ChildModel.fromJson(snapshots.data()!),
+      toFirestore: (model, _) => model.toJson(),
+    );
+  }
+
+  Query<TeacherDataModel> getTeachersByUid(String? uid) {
+    return _getUserCollectionRef(UserType.Teacher)
+        .where(_uid, isEqualTo: uid)
+        .withConverter<TeacherDataModel>(
+      fromFirestore: (snapshots, _) =>
+          TeacherDataModel.fromJson(snapshots.data()!),
+      toFirestore: (model, _) => model.toJson(),
+    );
+  }
+
+  Query<ChildModel> getChildrenByUid(String uid) {
+    return _fStore.collection(_children)
+        .where(_id, isEqualTo: uid)
+        .withConverter<ChildModel>(
+      fromFirestore: (snapshots, _) =>
+          ChildModel.fromJson(snapshots.data()!),
       toFirestore: (model, _) => model.toJson(),
     );
   }
@@ -133,8 +168,9 @@ class FirestoreMethods {
     );
   }
 
-  CollectionReference<ParentDataModel> getParents() {
+  Query<ParentDataModel> getParents(String? instituteId) {
     return _getUserCollectionRef(UserType.Parent)
+        .where(_instituteId, isEqualTo: instituteId)
         .withConverter<ParentDataModel>(
       fromFirestore: (snapshots, _) =>
           ParentDataModel.fromJson(snapshots.data()!),

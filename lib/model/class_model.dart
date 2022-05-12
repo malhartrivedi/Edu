@@ -16,6 +16,8 @@ class ClassModel {
     required this.id,
     required this.name,
     required this.instituteId,
+    required this.teacherId,
+    required this.children,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -23,6 +25,8 @@ class ClassModel {
   String? id;
   String? name;
   String? instituteId;
+  String? teacherId;
+  List<String> children;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -30,6 +34,8 @@ class ClassModel {
         id: json["id"]! as String,
         name: json["name"]! as String,
         instituteId: json["institute_id"]! as String,
+        teacherId: json["teacher_id"]! as String,
+        children: List<String>.from((json["children"]! as Iterable).map((x) => x)),
         createdAt: DateTime.parse(json["created_at"] as String).toLocal(),
         updatedAt: DateTime.parse(json["updated_at"] as String).toLocal(),
       );
@@ -38,6 +44,8 @@ class ClassModel {
         "id": id,
         "name": name,
         "institute_id": instituteId,
+        "teacher_id": teacherId,
+        "children": List<dynamic>.from(children.map((x) => x)),
         "created_at": createdAt!.toUtc().toIso8601String(),
         "updated_at": updatedAt!.toUtc().toIso8601String(),
       };

@@ -6,7 +6,7 @@ import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/app_icon.dart';
 import 'package:admin/utils/constants.dart';
 import 'package:admin/utils/global.dart';
-import 'package:admin/views/home/classes_detail_page.dart';
+import 'package:admin/views/home/classes/classes_detail_page.dart';
 import 'package:admin/views/home/parent/parent_page.dart';
 import 'package:admin/views/home/teacher/teacher_page.dart';
 import 'package:admin/widgets/my_loading.dart';
@@ -426,9 +426,13 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Expanded(
                       child: InkWell(
-                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> ClassesDetailPage(classModel: model,classRef: classReference,))),
-                        child: Container(
-                          margin: EdgeInsets.symmetric(
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                            ClassesDetailPage(
+                                    classModel: model,
+                                    classRef: classReference,
+                                  ))),
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
                               horizontal: 4.w, vertical: 4.h),
                           padding: EdgeInsets.all(6.w),
                           decoration: BoxDecoration(
@@ -558,5 +562,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 }

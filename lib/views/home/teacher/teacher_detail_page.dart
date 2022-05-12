@@ -208,6 +208,4 @@ class _TeacherDetailPageState extends State<TeacherDetailPage> {
       ),
     );
   }
-
-
 }

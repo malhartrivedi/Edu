@@ -1,16 +1,21 @@
 import 'package:admin/model/class_model.dart';
-import 'package:admin/service/firestore_methods.dart';
 import 'package:admin/utils/app_color.dart';
 import 'package:admin/utils/constants.dart';
+import 'package:admin/views/home/classes/chat_tab_page.dart';
+import 'package:admin/views/home/classes/home_tab_page.dart';
 import 'package:admin/widgets/my_textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ClassesDetailPage extends StatefulWidget {
-  ClassesDetailPage({Key? key, required this.classModel, required this.classRef}) : super(key: key);
+  ClassesDetailPage(
+      {Key? key, required this.classModel, required this.classRef})
+      : super(key: key);
 
   ClassModel classModel;
   DocumentReference classRef;
+
   @override
   _ClassesDetailPageState createState() => _ClassesDetailPageState();
 }
@@ -62,7 +67,7 @@ class _ClassesDetailPageState extends State<ClassesDetailPage> {
       labelColor: white,
       indicatorColor: white,
       tabs: [
-        Tab(text: Constants.home,),
+        Tab(text: Constants.home),
         Tab(text: Constants.chat),
         Tab(text: Constants.lessons)
       ],
@@ -72,9 +77,9 @@ class _ClassesDetailPageState extends State<ClassesDetailPage> {
   _getBody() {
     return TabBarView(
       children: [
-        Center(child: Text(Constants.home)),
-        Center(child: Text(Constants.chat)),
-        Center(child: Text(Constants.lessons)),
+        HomeTabPage(widget.classModel,widget.classRef),
+        ChatTabPage(),
+        Text(Constants.lessons),
       ],
     );
   }

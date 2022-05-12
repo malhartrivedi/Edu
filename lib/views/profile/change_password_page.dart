@@ -247,6 +247,4 @@ class _ChangePasswordState extends State<ChangePassword> {
       child: child,
     );
   }
-
-
 }
